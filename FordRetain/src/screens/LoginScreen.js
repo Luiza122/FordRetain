@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, 
-  Alert, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator, Animated } from 'react-native';
-import { loginUser } from '../firebase/authService';
+  Alert, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator } from 'react-native';
+import { MOCK_CREDENTIALS } from '../data/mockAuth';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -9,28 +9,34 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleLogin() {
+  function handleLogin() {
     if (!email.trim() || !password.trim()) {
       Alert.alert('Atenção', 'Preencha email e senha.');
       return;
     }
 
-    if (!email.includes('@')) {
-      Alert.alert('Erro', 'Email inválido.');
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      Alert.alert('Erro', 'Digite um email válido no formato nome@dominio.com.');
       return;
     }
 
     setLoading(true);
-    try {
-      await loginUser(email.trim(), password);
-      Alert.alert('Sucesso!', 'Login realizado com sucesso!', [
-        { text: 'OK', onPress: () => navigation.navigate('Dashboard') }
-      ]);
-    } catch (error) {
-      Alert.alert('Erro ao entrar', error.message);
-    } finally {
+
+    if (
+      normalizedEmail !== MOCK_CREDENTIALS.email ||
+      password !== MOCK_CREDENTIALS.password
+    ) {
       setLoading(false);
+      Alert.alert('Credencial incorreta', 'Email ou senha não conferem. Tente novamente.');
+      return;
     }
+
+    setLoading(false);
+    Alert.alert('Sucesso!', 'Login realizado com sucesso!', [
+      { text: 'OK', onPress: () => navigation.navigate('Dashboard') }
+    ]);
   }
 
   return (
