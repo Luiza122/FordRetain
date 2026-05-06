@@ -1,0 +1,219 @@
+﻿FIAP – Plano de aula – Layout / Navegação – Aula 01
+
+App Exemplo :
+    • Tela de Login, 
+    • Tela de Cadastro, 
+    • Tela Esqueci minha senha 
+    • Tela Home
+Foco: layouts + navegação
+
+Objetivo da aula
+Construir uma aplicação simples com:
+    1. Tela de Login
+    2. Tela de Cadastro
+    3. Tela de Esqueci minha senha
+    4. Tela Home
+    5. Navegação entre telas
+Nesta aula, não haverá backend.
+O foco será:
+    • criação do projeto
+    • organização de pastas
+    • criação de telas
+    • navegação entre telas
+    • construção de layout
+
+Passo 1 — Criar o projeto
+Vamos criar um projeto Expo limpo, sem tabs e sem estrutura pronta de navegação.
+
+npx create-expo-app fiap-auth-app --template blank
+
+ps. adicionar @54 ao final do comando caso esteja utilizando um device iOS
+
+Depois, entrar na pasta do projeto:
+
+cd fiap-auth-app
+
+Passo 2 — Instalar a navegação
+Vamos instalar as bibliotecas necessárias para trabalhar com navegação.
+
+npm install @react-navigation/native
+npm install @react-navigation/native-stack
+npm install react-native-screens@4.16.0 --save-exact
+npx expo install react-native-safe-area-context
+
+
+Passo 3 — Executar o projeto
+
+npx expo start
+
+Passo 4 — Criar a estrutura de pastas
+Dentro do projeto, criar a seguinte estrutura:
+
+src/
+  navigation/
+  screens/
+  components/
+
+
+Passo 5 — Preparar o App.js
+Substituir o conteúdo do App.js por:
+
+
+import AppNavigator from './src/navigation/AppNavigator';
+export default function App() {
+  return <AppNavigator />;
+}
+
+
+Passo 6 — Criar o arquivo de navegação
+Criar o arquivo:
+src/navigation/AppNavigator.js
+Com o seguinte conteúdo:
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import HomeScreen from '../screens/HomeScreen';
+const Stack = createNativeStackNavigator();
+
+export default function AppNavigator() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Cadastro" component={RegisterScreen} />
+        <Stack.Screen name="EsqueciSenha" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+Passo 7 — Criar a tela de Login
+Criar o arquivo:
+
+src/screens/LoginScreen.js
+
+import { View, Text, TextInput, Button, TouchableOpacity } from 'react-native';
+
+export default function LoginScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
+
+      <TextInput
+        placeholder="Email"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Senha"
+        secureTextEntry={true}
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Entrar" onPress={() => navigation.navigate('Home')} />
+
+      <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+        <Text style={{ marginTop: 10 }}>Criar conta</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
+        <Text style={{ marginTop: 10 }}>Esqueci minha senha</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+Passo 8 — Criar a tela de Cadastro
+Criar o arquivo:
+src/screens/RegisterScreen.js
+
+
+import { View, Text, TextInput, Button } from 'react-native';
+
+export default function RegisterScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Cadastro</Text>
+
+      <TextInput
+        placeholder="Nome"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Email"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Senha"
+        secureTextEntry={true}
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Cadastrar" onPress={() => navigation.goBack()} />
+    </View>
+  );
+}
+
+
+
+Passo 9 — Criar a tela de Esqueci minha senha
+Criar o arquivo:
+src/screens/ForgotPasswordScreen.js
+
+import { View, Text, TextInput, Button } from 'react-native';
+
+export default function ForgotPasswordScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Recuperar Senha</Text>
+
+      <TextInput
+        placeholder="Email"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Enviar" onPress={() => navigation.goBack()} />
+    </View>
+  );
+}
+
+Passo 10 — Criar a tela Home
+Criar o arquivo:
+src/screens/HomeScreen.js
+
+import { View, Text, Button } from 'react-native';
+
+export default function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Bem-vindo!</Text>
+
+      <Button title="Sair" onPress={() => navigation.navigate('Login')} />
+    </View>
+  );
+}
+
+
+
+Passo 11 — Testar a navegação
+Agora vamos verificar se os fluxos estão funcionando:
+    • Login → Home
+    • Login → Cadastro
+    • Login → Esqueci minha senha
+    • Cadastro → voltar
+    • Esqueci minha senha → voltar
+    • Home → Login
+
+
+
+
+
+
+
+

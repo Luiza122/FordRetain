@@ -1,0 +1,433 @@
+﻿FIAP – Plano de aula – Autenticação – Aula 02
+
+Passo 1 — Criar e preparar o projeto no Firebase Console
+Neste passo, vamos deixar o projeto Firebase pronto para o app.
+1.1 Criar o projeto
+No Firebase Console:
+    1. Clique em Criar projeto
+    2. Dê um nome para o projeto
+Exemplo: fiap-auth-app
+    3. Pode manter o Google Analytics desativado, se quiser simplificar
+    4. Finalize a criação
+1.2 Adicionar um app Web ao projeto
+Como no Expo vamos usar o Firebase JS SDK, o cadastro que usaremos no console é o de aplicativo Web. Isso é normal nesse cenário. 
+Faça assim:
+    1. Dentro do projeto Firebase, clique em Adicionar app
+    2. Escolha o ícone Web </>
+    3. Dê um nome ao app
+Exemplo: fiap-rn-auth
+    4. Não precisa marcar hospedagem
+    5. Conclua
+Ao final, o Firebase vai mostrar um bloco parecido com este:
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+1.3 Ativar autenticação por email e senha
+Agora habilite o método de login:
+    1. No menu lateral, entre em Authentication
+    2. Clique em Get started se for a primeira vez
+    3. Vá em Sign-in method
+    4. Ative Email/Password
+    5. Salve
+Esse passo é obrigatório para cadastro, login e recuperação de senha funcionarem. 
+1.4 Opcional, mas recomendado para aula: ajustar template de recuperação
+Ainda no Firebase Console:
+    1. Vá em Authentication
+    2. Abra a área de Templates de email
+    3. Confira o template de Redefinição de senha
+Não precisa customizar agora, mas é bom saber onde fica. O Firebase envia esse email automaticamente quando chamarmos a função de reset.
+
+Passo 2 — Instalar o Firebase e preparar o arquivo de configuração
+Como seu app está em Expo e o escopo agora é email/senha + reset de senha, o caminho mais simples e compatível com Expo Go é usar o Firebase JS SDK. A própria documentação do Expo indica esse caminho para casos como Authentication, Firestore, Realtime Database e Storage em projetos Expo. 
+2.1 Instalar a dependência
+Na raiz do projeto, rode:
+
+npm install firebase
+
+Para esse fluxo de autenticação com email/senha, não precisamos adicionar biblioteca extra agora. O SDK do Firebase já fornece as funções que vamos usar, como createUserWithEmailAndPassword, signInWithEmailAndPassword e sendPasswordResetEmail.
+
+2.2 Criar uma pasta para configuração
+Sem quebrar sua estrutura atual, sugiro criar apenas esta pasta:
+src/firebase
+
+E dentro dela criar o arquivo:
+
+src/firebase/config.js
+
+
+2.3 Estrutura do arquivo config.js
+Por enquanto, crie o arquivo assim:
+
+// FILE: src/firebase/config.js
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: 'SUA_API_KEY',
+  authDomain: 'SEU_AUTH_DOMAIN',
+  projectId: 'SEU_PROJECT_ID',
+  storageBucket: 'SEU_STORAGE_BUCKET',
+  messagingSenderId: 'SEU_MESSAGING_SENDER_ID',
+  appId: 'SEU_APP_ID',
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export { auth };
+
+
+Esse formato segue o uso padrão do Firebase JS SDK: inicializa o app com initializeApp(...) e obtém a instância de autenticação com getAuth(app).
+
+
+2.4 Onde pegar os valores do firebaseConfig
+Esses dados vêm do Firebase Console, no app Web que você criou no passo anterior.
+Você vai copiar algo parecido com:
+
+
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+
+2.5 Confirmar o método de login no Console
+Antes de irmos para o próximo passo, confirme no Firebase Console que Email/Password está ativado em:
+Authentication → Sign-in method
+Esse método precisa estar habilitado para funcionar cadastro, login e redefinição de senha.
+
+Passo 3 — Criar as funções de autenticação
+Agora vamos isolar a lógica do Firebase em um arquivo simples, didático e reutilizável.
+O Firebase Auth para JavaScript usa exatamente as funções que precisamos aqui:
+    • createUserWithEmailAndPassword para cadastro
+    • signInWithEmailAndPassword para login
+    • sendPasswordResetEmail para recuperação de senha 
+
+3.1 Criar o arquivo do serviço
+Crie este arquivo:
+src/firebase/authService.js
+Cole este conteúdo:
+
+// FILE: src/firebase/authService.js
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
+import { auth } from './config';
+
+export async function registerUser(email, password) {
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  return userCredential;
+}
+
+export async function loginUser(email, password) {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  return userCredential;
+}
+
+export async function resetUserPassword(email) {
+  await sendPasswordResetEmail(auth, email);
+}
+
+
+
+3.2 Por que fazer assim?
+Desse jeito:
+    • as telas ficam mais limpas
+    • a lógica do Firebase fica em um só lugar
+    • o código continua simples para aula
+    • depois, se quiser, fica fácil melhorar mensagens de erro ou adicionar logout
+
+3.3 Estrutura esperada agora
+Seu projeto deve ficar assim nessa parte:
+
+src/
+  components/
+  firebase/
+    config.js
+    authService.js
+  navigation/
+    AppNavigator.js
+  screens/
+    LoginScreen.js
+    RegisterScreen.js
+    ForgotPasswordScreen.js
+    HomeScreen.js
+
+
+3.4 Ainda não vamos mexer nas telas
+Neste passo, a ideia é só preparar as funções.
+No próximo passo vamos integrar primeiro a tela de cadastro, depois:
+    • login
+    • reset de senha
+assim fica mais organizado.
+
+Passo 4 — Integrar o cadastro na RegisterScreen
+Agora vamos ligar a tela de cadastro ao Firebase.
+Neste passo vamos fazer só a tela de cadastro, com:
+    • controle dos campos
+    • validação básica
+    • chamada do registerUser
+    • Alert para sucesso e erro
+    • retorno para a tela de login após cadastro
+
+
+Substitua sua RegisterScreen.js por esta versão
+
+// FILE: src/screens/RegisterScreen.js
+import { useState } from 'react';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { registerUser } from '../firebase/authService';
+
+export default function RegisterScreen({ navigation }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleRegister() {
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      Alert.alert('Atenção', 'Preencha nome, email e senha.');
+      return;
+    }
+
+    try {
+      await registerUser(email.trim(), password);
+      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso.');
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert('Erro ao cadastrar', error.message);
+    }
+  }
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Cadastro</Text>
+
+      <TextInput
+        placeholder="Nome"
+        value={name}
+        onChangeText={setName}
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Senha"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Cadastrar" onPress={handleRegister} />
+    </View>
+  );
+}
+
+O que mudou
+Aqui fizemos quatro ajustes importantes:
+    1. Adicionamos useState para controlar os campos.
+    2. Importamos Alert para mostrar mensagens simples.
+    3. Importamos registerUser do seu serviço Firebase.
+    4. Trocamos o navigation.goBack() direto por handleRegister(), que agora cadastra de verdade antes de voltar.
+
+Passo 5 — Integrar o login na LoginScreen
+Agora vamos ligar a tela de login ao Firebase.
+Neste passo vamos adicionar:
+    • controle dos campos
+    • validação básica
+    • chamada do loginUser
+    • Alert para erro
+    • navegação para Home quando o login der certo
+    • 
+Substitua sua LoginScreen.js por esta versão
+
+// FILE: src/screens/LoginScreen.js
+import { useState } from 'react';
+import { View, Text, TextInput, Button, TouchableOpacity, Alert } from 'react-native';
+import { loginUser } from '../firebase/authService';
+
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleLogin() {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('Atenção', 'Preencha email e senha.');
+      return;
+    }
+
+    try {
+      await loginUser(email.trim(), password);
+      navigation.navigate('Home');
+    } catch (error) {
+      Alert.alert('Erro ao entrar', error.message);
+    }
+  }
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
+
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <TextInput
+        placeholder="Senha"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Entrar" onPress={handleLogin} />
+
+      <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+        <Text style={{ marginTop: 10 }}>Criar conta?</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
+        <Text style={{ marginTop: 10 }}>Esqueci minha senha</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+Passo 6 — Integrar a recuperação de senha na ForgotPasswordScreen
+Agora vamos conectar a tela de Esqueci minha senha ao Firebase.
+O Firebase Auth oferece a função sendPasswordResetEmail, que envia o email de redefinição para o endereço informado.
+Substitua sua ForgotPasswordScreen.js por esta versão
+
+// FILE: src/screens/ForgotPasswordScreen.js
+import { useState } from 'react';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { resetUserPassword } from '../firebase/authService';
+
+export default function ForgotPasswordScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+
+  async function handleResetPassword() {
+    if (!email.trim()) {
+      Alert.alert('Atenção', 'Informe seu email.');
+      return;
+    }
+
+    try {
+      await resetUserPassword(email.trim());
+      Alert.alert(
+        'Email enviado',
+        'Enviamos as instruções de recuperação de senha para seu email.'
+      );
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert('Erro ao enviar email', error.message);
+    }
+  }
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Recuperar Senha</Text>
+
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+      />
+
+      <Button title="Enviar" onPress={handleResetPassword} />
+    </View>
+  );
+}
+
+
+O que mudou
+    • adicionamos useState para controlar o email
+    • importamos resetUserPassword
+    • criamos handleResetPassword()
+    • mostramos Alert para sucesso e erro
+    • voltamos para a tela anterior após envio com sucesso
+
+
+
+Passo 7 — Revisão final e teste completo do fluxo
+Agora que as três partes estão integradas, vamos validar o fluxo completo sem mudar a estrutura do projeto.
+O que testar
+1. Cadastro
+Na tela Cadastro:
+    • preencha nome, email e senha
+    • toque em Cadastrar
+Resultado esperado:
+    • usuário é criado no Firebase
+    • aparece mensagem de sucesso
+    • app volta para a tela de login
+
+2. Login
+Na tela Login:
+    • informe o mesmo email e senha cadastrados
+    • toque em Entrar
+Resultado esperado:
+    • login é realizado
+    • navega para a tela Home
+
+3. Recuperação de senha
+Na tela Recuperar Senha:
+    • informe o email cadastrado
+    • toque em Enviar
+Resultado esperado:
+    • aparece mensagem de sucesso
+    • volta para a tela anterior
+    • o email de redefinição chega na caixa do usuário
+
+Verificação no Firebase Console
+Confira também no Firebase Console:
+Authentication → Users
+Você deve ver o usuário criado ali.
+
+
+
+
+
+
+
+
+
+
+
