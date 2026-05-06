@@ -36,7 +36,7 @@ export default function LeadsScreen({ navigation }) {
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('LeadDetails', { lead: item })}
+        onPress={() => navigation.navigate('ClientDetails', { lead: item })}
         style={[styles.item, getBadgeStyle(item.profile)]}
       >
         <View style={styles.row}>

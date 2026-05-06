@@ -85,7 +85,7 @@ export default function DashboardScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Leads')}
+        onPress={() => navigation.navigate('RiskClients')}
       >
         <Text style={styles.buttonText}>Ver clientes em risco</Text>
       </TouchableOpacity>

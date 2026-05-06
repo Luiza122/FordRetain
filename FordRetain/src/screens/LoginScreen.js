@@ -108,11 +108,11 @@ export default function LoginScreen({ navigation }) {
         </View>
 
         <View style={styles.footer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} disabled={loading}>
+          <TouchableOpacity onPress={() => navigation.navigate('Profiles')} disabled={loading}>
             <Text style={styles.link}>Não tem conta? <Text style={styles.linkBold}>Criar conta</Text></Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')} disabled={loading}>
+          <TouchableOpacity onPress={() => navigation.navigate('Security')} disabled={loading}>
             <Text style={styles.link}>Esqueci minha senha</Text>
           </TouchableOpacity>
         </View>
