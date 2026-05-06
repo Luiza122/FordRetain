@@ -96,7 +96,8 @@ export default function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8fafc',
+    flexGrow: 1,
   },
   center: {
     flex: 1,
