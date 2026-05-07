@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.card}>
         <Text style={styles.title}>FordRetain</Text>
-        <Text style={styles.subtitle}>Plataforma de retenção preditiva para concessionárias Ford</Text>
+        <Text style={styles.subtitle}>Plataforma de retenção preditiva para veículos Ford</Text>
 
         <TextInput
           style={styles.input}
