@@ -3,13 +3,14 @@ import PrimaryButton from '../components/PrimaryButton';
 import ProfileBadge from '../components/ProfileBadge';
 import colors from '../styles/colors';
 
-export default function ClientDetailsScreen({ route }) {
+export default function ClientDetailsScreen({ route, navigation }) {
   const client = route.params?.client;
 
   if (!client) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>Cliente não encontrado.</Text>
+        <PrimaryButton title="Voltar para clientes em risco" onPress={() => navigation.navigate('RiskClients')} />
       </View>
     );
   }
@@ -31,19 +32,21 @@ export default function ClientDetailsScreen({ route }) {
 
       <PrimaryButton
         title="Marcar ação como planejada"
-        onPress={() => Alert.alert('Sucesso', 'Ação marcada como planejada com sucesso.')}
+        onPress={() => Alert.alert('Ação planejada com sucesso', 'A concessionária poderá acompanhar este cliente na próxima etapa.')}
       />
+      <PrimaryButton title="Voltar para clientes em risco" variant="secondary" onPress={() => navigation.navigate('RiskClients')} />
+      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 16, backgroundColor: '#F8FAFC', gap: 12 },
-  title: { fontSize: 26, fontWeight: '700', color: colors.primaryDark },
-  subtitle: { color: colors.slate, marginBottom: 4 },
-  card: { backgroundColor: colors.white, borderRadius: 14, borderWidth: 1, borderColor: '#E2E8F0', padding: 14, gap: 10 },
+  container: { flexGrow: 1, padding: 16, backgroundColor: colors.background, gap: 12 },
+  title: { fontSize: 26, fontWeight: '700', color: colors.navy },
+  subtitle: { color: colors.textGray, marginBottom: 4 },
+  card: { backgroundColor: colors.white, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 10 },
   item: { color: '#1E293B', lineHeight: 21 },
-  label: { fontWeight: '700', color: '#0F172A' },
-  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8FAFC' },
-  emptyText: { color: colors.slate, fontSize: 16 },
+  label: { fontWeight: '700', color: colors.navy },
+  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background, padding: 16 },
+  emptyText: { color: colors.textGray, fontSize: 16, marginBottom: 10 },
 });

@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ProfileBadge from '../components/ProfileBadge';
 import colors from '../styles/colors';
+import PrimaryButton from '../components/PrimaryButton';
 
 const profiles = [
   { nome: 'Cliente Fiel', descricao: 'Alta recorrência em revisões e confiança no atendimento da concessionária.', risco: 'Baixo', estrategia: 'Programa de fidelidade, upgrades de serviço e relacionamento VIP.' },
@@ -9,7 +10,7 @@ const profiles = [
   { nome: 'Cliente de Abandono', descricao: 'Mostra sinais de evasão para oficinas independentes e queda de frequência.', risco: 'Alto', estrategia: 'Contato consultivo imediato com proposta de recuperação personalizada.' },
 ];
 
-export default function ProfilesScreen() {
+export default function ProfilesScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Perfis de Comportamento</Text>
@@ -21,13 +22,15 @@ export default function ProfilesScreen() {
           <Text style={styles.text}><Text style={styles.label}>Estratégia de retenção:</Text> {profile.estrategia}</Text>
         </View>
       ))}
+
+      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
-  title: { fontSize: 24, fontWeight: '700', marginBottom: 12, color: colors.primaryDark },
+  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
+  title: { fontSize: 24, fontWeight: '700', marginBottom: 12, color: colors.navy },
   card: { backgroundColor: colors.white, borderRadius: 12, padding: 14, marginBottom: 12, borderWidth: 1, borderColor: '#E2E8F0', gap: 8 },
   text: { color: '#334155', lineHeight: 20 },
   label: { fontWeight: '700', color: '#0f172a' },

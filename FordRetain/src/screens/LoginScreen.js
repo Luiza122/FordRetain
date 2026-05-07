@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import PrimaryButton from '../components/PrimaryButton';
 import { MOCK_CREDENTIALS } from '../data/mockAuth';
 import colors from '../styles/colors';
 
@@ -52,9 +53,10 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
+        <PrimaryButton title="Entrar" onPress={handleLogin} />
+
+        <Text style={styles.registerPrompt}>Ainda não tem conta?</Text>
+        <PrimaryButton title="Criar conta" variant="secondary" onPress={() => navigation.navigate('Cadastro')} />
 
         <View style={styles.demoBox}>
           <Text style={styles.demoTitle}>Login de teste</Text>
@@ -67,14 +69,13 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.primaryDark, justifyContent: 'center', padding: 16 },
-  card: { backgroundColor: colors.white, borderRadius: 14, padding: 18, borderWidth: 1, borderColor: '#E2E8F0' },
-  title: { fontSize: 30, fontWeight: '700', color: colors.primaryDark, marginBottom: 6 },
-  subtitle: { color: colors.slate, marginBottom: 16 },
-  input: { borderWidth: 1, borderColor: '#CBD5E1', borderRadius: 10, padding: 12, marginBottom: 10, color: '#0F172A' },
-  button: { backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: 'center', marginTop: 4 },
-  buttonText: { color: colors.white, fontWeight: '700' },
-  demoBox: { marginTop: 14, backgroundColor: '#EAF2FF', borderRadius: 10, padding: 12 },
-  demoTitle: { color: '#0F172A', fontWeight: '700', marginBottom: 4 },
-  demoText: { color: '#334155' },
+  container: { flex: 1, backgroundColor: colors.navy, justifyContent: 'center', padding: 16 },
+  card: { backgroundColor: colors.white, borderRadius: 14, padding: 18, borderWidth: 1, borderColor: colors.border },
+  title: { fontSize: 30, fontWeight: '700', color: colors.navy, marginBottom: 6 },
+  subtitle: { color: colors.textGray, marginBottom: 16 },
+  input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, marginBottom: 10, color: colors.navy },
+  registerPrompt: { color: colors.textGray, marginTop: 6, marginBottom: 2, textAlign: 'center', fontWeight: '600' },
+  demoBox: { marginTop: 14, backgroundColor: colors.lightBlue, borderRadius: 10, padding: 12 },
+  demoTitle: { color: colors.navy, fontWeight: '700', marginBottom: 4 },
+  demoText: { color: colors.textGray },
 });
