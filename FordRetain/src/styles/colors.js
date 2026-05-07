@@ -1,12 +1,15 @@
 const colors = {
-  primaryDark: '#0B1F3A',
-  primary: '#1E5AA8',
-  primaryLight: '#EAF2FF',
+  navy: '#0B1F3A',
+  fordBlue: '#1E5AA8',
+  lightBlue: '#EAF2FF',
   white: '#FFFFFF',
-  slate: '#475569',
-  danger: '#DC2626',
-  success: '#16A34A',
-  warning: '#F59E0B',
+  textGray: '#475569',
+  riskRed: '#DC2626',
+  successGreen: '#16A34A',
+  warningYellow: '#F59E0B',
+  infoBlue: '#2563EB',
+  border: '#D9E2F2',
+  background: '#F5F8FF',
 };
 
 export default colors;

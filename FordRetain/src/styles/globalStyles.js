@@ -2,32 +2,38 @@ import { StyleSheet } from 'react-native';
 import colors from './colors';
 
 const globalStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  container: {
+    padding: 16,
+    paddingBottom: 32,
+  },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: '700',
-    color: colors.white,
-    letterSpacing: 0.6,
+    color: colors.navy,
   },
   subtitle: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.primaryLight,
-    lineHeight: 20,
+    fontSize: 15,
+    color: colors.textGray,
+    marginTop: 4,
+    lineHeight: 22,
   },
   card: {
     backgroundColor: colors.white,
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 3,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 14,
+    marginBottom: 12,
+    shadowColor: '#0f172a',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 2,
   },
-  spacingXs: { marginBottom: 4 },
-  spacingSm: { marginBottom: 8 },
-  spacingMd: { marginBottom: 16 },
-  spacingLg: { marginBottom: 24 },
 });
 
 export default globalStyles;

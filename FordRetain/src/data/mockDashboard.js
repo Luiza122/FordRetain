@@ -1,22 +1,26 @@
 const mockDashboard = {
-  vinShareGeral: 0.734,
-  totalClientes: 1280,
-  clientesAltoRisco: 146,
-  agendamentosRecomendados: 93,
-  vinSharePorRegiao: {
-    Norte: 0.68,
-    Nordeste: 0.71,
-    CentroOeste: 0.75,
-    Sudeste: 0.78,
-    Sul: 0.74,
-  },
-  vinSharePorModelo: {
-    Ranger: 0.79,
-    Territory: 0.72,
-    Maverick: 0.76,
-    Transit: 0.69,
-    Bronco: 0.73,
-  },
+  vinShareGeral: '71.4%',
+  clientesMonitorados: 1240,
+  clientesAltoRisco: 186,
+  agendamentosRecomendados: 94,
+  vinSharePorRegiao: [
+    { regiao: 'Sudeste', valor: '74%' },
+    { regiao: 'Sul', valor: '72%' },
+    { regiao: 'Centro-Oeste', valor: '70%' },
+    { regiao: 'Nordeste', valor: '66%' },
+    { regiao: 'Norte', valor: '64%' },
+  ],
+  vinSharePorModelo: [
+    { modelo: 'Ranger', valor: '79%' },
+    { modelo: 'Territory', valor: '73%' },
+    { modelo: 'Maverick', valor: '69%' },
+    { modelo: 'Ka', valor: '61%' },
+  ],
+  alertas: [
+    'Sudeste concentra maior volume absoluto de clientes em alto risco.',
+    'Modelo Ka apresentou queda de 4 p.p. no VIN Share em 60 dias.',
+    'Clientes com financiamento longo têm maior propensão ao perfil econômico.',
+  ],
 };
 
 export default mockDashboard;

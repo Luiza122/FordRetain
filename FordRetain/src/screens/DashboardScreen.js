@@ -1,120 +1,20 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import MetricCard from '../components/MetricCard';
+import PrimaryButton from '../components/PrimaryButton';
 import mockDashboard from '../data/mockDashboard';
+import globalStyles from '../styles/globalStyles';
 
 export default function DashboardScreen({ navigation }) {
-  const {
-    vinShareGeral,
-    totalClientes,
-    clientesAltoRisco,
-    agendamentosRecomendados,
-    vinSharePorRegiao,
-    vinSharePorModelo,
-  } = mockDashboard;
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Dashboard VIN Share</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Login')}
-          style={styles.logoutBtn}
-        >
-          <Text style={styles.logoutText}>Sair</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.sectionTitle}>KPIs</Text>
-      <MetricCard title="VIN Share Geral" value={`${(vinShareGeral * 100).toFixed(1)}%`} />
-      <MetricCard title="Total de Clientes" value={String(totalClientes)} />
-      <MetricCard title="Clientes Alto Risco" value={String(clientesAltoRisco)} />
-      <MetricCard
-        title="Agendamentos Recomendados"
-        value={String(agendamentosRecomendados)}
-      />
-
-      <Text style={styles.sectionTitle}>VIN Share por região</Text>
-      {Object.entries(vinSharePorRegiao).map(([regiao, valor]) => (
-        <MetricCard
-          key={regiao}
-          title={regiao}
-          value={`${(valor * 100).toFixed(1)}%`}
-        />
-      ))}
-
-      <Text style={styles.sectionTitle}>VIN Share por modelo</Text>
-      {Object.entries(vinSharePorModelo).map(([modelo, valor]) => (
-        <MetricCard
-          key={modelo}
-          title={modelo}
-          value={`${(valor * 100).toFixed(1)}%`}
-        />
-      ))}
-
-      <View style={styles.actions}>
-        {[
-          { label: 'RiskClients', route: 'RiskClients' },
-          { label: 'Prediction', route: 'Prediction' },
-          { label: 'Profiles', route: 'Profiles' },
-          { label: 'Security', route: 'Security' },
-          { label: 'About', route: 'About' },
-        ].map(({ label, route }) => (
-          <TouchableOpacity
-            key={route}
-            style={styles.button}
-            onPress={() => navigation.navigate(route)}
-          >
-            <Text style={styles.buttonText}>{label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    <ScrollView style={globalStyles.screen} contentContainerStyle={globalStyles.container}>
+      <Text style={globalStyles.title}>FordRetain — Dashboard Executivo</Text>
+      <Text style={globalStyles.subtitle}>Visão de retenção e VIN Share da rede.</Text>
+      <View style={styles.grid}><MetricCard label='VIN Share geral' value={mockDashboard.vinShareGeral}/><MetricCard label='Clientes monitorados' value={mockDashboard.clientesMonitorados}/><MetricCard label='Clientes em alto risco' value={mockDashboard.clientesAltoRisco}/><MetricCard label='Agendamentos recomendados' value={mockDashboard.agendamentosRecomendados}/></View>
+      <View style={globalStyles.card}><Text style={styles.section}>VIN Share por região</Text>{mockDashboard.vinSharePorRegiao.map(i=><Text key={i.regiao}>• {i.regiao}: {i.valor}</Text>)}</View>
+      <View style={globalStyles.card}><Text style={styles.section}>VIN Share por modelo</Text>{mockDashboard.vinSharePorModelo.map(i=><Text key={i.modelo}>• {i.modelo}: {i.valor}</Text>)}</View>
+      <View style={globalStyles.card}><Text style={styles.section}>Alertas estratégicos</Text>{mockDashboard.alertas.map((a,idx)=><Text key={idx}>• {a}</Text>)}</View>
+      <View style={globalStyles.card}><Text style={styles.section}>Menu FordRetain</Text><PrimaryButton title='Clientes em risco' onPress={()=>navigation.navigate('RiskClients')}/><PrimaryButton title='Predição de cliente' onPress={()=>navigation.navigate('Prediction')}/><PrimaryButton title='Perfis de comportamento' onPress={()=>navigation.navigate('Profiles')}/><PrimaryButton title='Segurança e privacidade' onPress={()=>navigation.navigate('Security')}/><PrimaryButton title='Sobre o projeto' onPress={()=>navigation.navigate('About')}/></View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#f8fafc',
-    flexGrow: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  logoutBtn: {
-    padding: 8,
-  },
-  logoutText: {
-    color: '#2563eb',
-    fontWeight: '600',
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 14,
-    marginBottom: 8,
-    color: '#0f172a',
-  },
-  actions: {
-    marginTop: 14,
-    marginBottom: 10,
-    gap: 8,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-});
+const styles=StyleSheet.create({grid:{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',marginTop:14},section:{fontSize:18,fontWeight:'700',marginBottom:8}});
