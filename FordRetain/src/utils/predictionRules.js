@@ -1,60 +1,50 @@
-export function predictCustomerProfile(formData = {}) {
-  const {
-    formaPagamento,
-    jaClienteFord,
-    promocaoAtiva,
-    prazoFinanciamentoMeses,
-    idade,
-    possuiHistoricoCompras,
-    baixaFrequenciaRegional,
-    baixaFrequenciaComportamental,
-  } = formData;
+export function predictCustomerProfile(formData) {
+  const { idade, regiao, formaPagamento, canalCompra, historicoMarca } = formData;
 
-  // Regra 1: pagamento à vista + já cliente Ford indica maior chance de perfil Fiel.
-  if (formaPagamento === 'a_vista' && jaClienteFord === true) {
+  // Regra 1: à vista + já era cliente Ford = tendência de fidelidade.
+  if (formaPagamento === 'À vista' && historicoMarca === 'Já era cliente Ford') {
     return {
-      perfil: 'Fiel',
-      probabilidade: 0.9,
-      acaoRecomendada: 'Oferecer upgrade de linha com benefícios de fidelidade.',
-      explicacao: 'Cliente recorrente com pagamento à vista demonstra alta confiança e poder de decisão.',
+      perfil: 'Cliente Fiel',
+      probabilidade: 84,
+      acaoRecomendada: 'Convidar para programa premium de revisões e benefícios de fidelidade.',
+      explicacao: 'Pagamento à vista com histórico positivo indica alto vínculo com a marca.',
     };
   }
 
-  // Regra 2: interesse em promoção ou financiamento longo tende ao perfil Econômico.
-  if (promocaoAtiva === true || Number(prazoFinanciamentoMeses) >= 48) {
+  // Regra 2: promoção ou financiamento longo = sensível a preço.
+  if (canalCompra === 'Promoção' || formaPagamento === 'Financiamento longo') {
     return {
-      perfil: 'Econômico',
-      probabilidade: 0.78,
-      acaoRecomendada: 'Priorizar proposta com custo-benefício e condições competitivas.',
-      explicacao: 'Sensibilidade a preço e parcelamento estendido sugere foco em economia.',
+      perfil: 'Cliente Econômico',
+      probabilidade: 78,
+      acaoRecomendada: 'Enviar pacote de revisão com desconto e condições facilitadas.',
+      explicacao: 'Sinais de decisão orientada a preço e oportunidade comercial.',
     };
   }
 
-  // Regra 3: cliente jovem e sem histórico aponta risco de perfil Abandono.
-  if (Number(idade) <= 25 && possuiHistoricoCompras === false) {
+  // Regra 3: cliente jovem sem histórico com a marca = risco de abandono.
+  if (Number(idade) < 30 && historicoMarca === 'Primeiro Ford') {
     return {
-      perfil: 'Abandono',
-      probabilidade: 0.72,
-      acaoRecomendada: 'Executar fluxo de nutrição com contato rápido e ofertas de entrada.',
-      explicacao: 'Faixa etária jovem sem vínculo prévio pode indicar baixa permanência no funil.',
+      perfil: 'Cliente de Abandono',
+      probabilidade: 81,
+      acaoRecomendada: 'Criar jornada de onboarding pós-venda com contato consultivo em 30 dias.',
+      explicacao: 'Perfil inicial com baixo vínculo histórico aumenta risco de evasão após a primeira revisão.',
     };
   }
 
-  // Regra 4: baixa frequência regional ou comportamental sugere perfil Esquecido.
-  if (baixaFrequenciaRegional === true || baixaFrequenciaComportamental === true) {
+  // Regra 4: regiões com menor frequência tendem ao perfil esquecido.
+  if (['Norte', 'Centro-Oeste'].includes(regiao)) {
     return {
-      perfil: 'Esquecido',
-      probabilidade: 0.69,
-      acaoRecomendada: 'Disparar campanha de reativação com lembretes e incentivo de retorno.',
-      explicacao: 'Sinais de pouca recorrência sugerem perda de lembrança e engajamento.',
+      perfil: 'Cliente Esquecido',
+      probabilidade: 74,
+      acaoRecomendada: 'Disparar lembretes inteligentes de revisão e facilitar agendamento digital.',
+      explicacao: 'Padrões regionais de menor recorrência exigem estímulo ativo para retorno.',
     };
   }
 
-  // Fallback padrão: cenário não mapeado pelas regras principais.
   return {
-    perfil: 'Neutro',
-    probabilidade: 0.5,
-    acaoRecomendada: 'Manter acompanhamento consultivo para coletar mais sinais de perfil.',
-    explicacao: 'Os dados atuais não ativaram regras específicas de classificação.',
+    perfil: 'Cliente Econômico',
+    probabilidade: 65,
+    acaoRecomendada: 'Oferecer proposta de manutenção preventiva com valor previsível.',
+    explicacao: 'Cenário intermediário sem sinais extremos de fidelidade ou abandono.',
   };
 }

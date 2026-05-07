@@ -1,82 +1,50 @@
-import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-const probabilitiesByProfile = {
-  'Oficina Fidelizada': 0.18,
-  'Sensível a Preço': 0.62,
-  'Digital Engajado': 0.33,
-  'Risco de Evasão': 0.79,
-};
-
-const actionsByProfile = {
-  'Oficina Fidelizada': 'Oferecer pacote premium de manutenção e benefícios de fidelidade.',
-  'Sensível a Preço': 'Disparar campanha com cupom e parcelamento de serviços essenciais.',
-  'Digital Engajado': 'Ativar jornada omnichannel com lembretes e autoagendamento pelo app.',
-  'Risco de Evasão': 'Abrir contato consultivo imediato com proposta personalizada.',
-};
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import PrimaryButton from '../components/PrimaryButton';
+import { predictCustomerProfile } from '../utils/predictionRules';
+import colors from '../styles/colors';
 
 export default function PredictionScreen() {
-  const [idade, setIdade] = useState('');
-  const [regiao, setRegiao] = useState('Sudeste');
-  const [modelo, setModelo] = useState('Ranger');
-  const [pagamento, setPagamento] = useState('Cartão');
-  const [canal, setCanal] = useState('App');
-  const [historico, setHistorico] = useState('Revisões em dia, sem faltas');
+  const [form, setForm] = useState({
+    idade: '',
+    regiao: 'Sudeste',
+    modelo: 'Ford Ranger',
+    formaPagamento: 'Financiamento',
+    canalCompra: 'Concessionária',
+    historicoMarca: 'Primeiro Ford',
+  });
   const [result, setResult] = useState(null);
 
-  const explanation = useMemo(() => {
-    if (!result) return '';
-    return `A combinação de idade (${idade || 'n/i'}), região (${regiao}), modelo (${modelo}), forma de pagamento (${pagamento}), canal (${canal}) e histórico informado sugere comportamento compatível com o perfil ${result.perfil}.`;
-  }, [result, idade, regiao, modelo, pagamento, canal]);
+  function update(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
   function handlePredict() {
-    const age = Number(idade);
-    let perfil = 'Digital Engajado';
-
-    if (historico.toLowerCase().includes('falt') || historico.toLowerCase().includes('atras')) {
-      perfil = 'Risco de Evasão';
-    } else if (pagamento.toLowerCase().includes('dinheiro') || pagamento.toLowerCase().includes('boleto')) {
-      perfil = 'Sensível a Preço';
-    } else if (age >= 45 && canal.toLowerCase().includes('concessionária')) {
-      perfil = 'Oficina Fidelizada';
-    }
-
-    setResult({
-      perfil,
-      probabilidade: probabilitiesByProfile[perfil],
-      acao: actionsByProfile[perfil],
-    });
+    setResult(predictCustomerProfile(form));
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Predição de Perfil de Cliente</Text>
+      <Text style={styles.title}>Predição de Novo Cliente</Text>
+      <Text style={styles.subtitle}>Preencha os dados para simular o perfil de retenção.</Text>
 
-      <TextInput style={styles.input} placeholder="Idade" value={idade} onChangeText={setIdade} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Região" value={regiao} onChangeText={setRegiao} />
-      <TextInput style={styles.input} placeholder="Modelo" value={modelo} onChangeText={setModelo} />
-      <TextInput style={styles.input} placeholder="Forma de pagamento" value={pagamento} onChangeText={setPagamento} />
-      <TextInput style={styles.input} placeholder="Canal de relacionamento" value={canal} onChangeText={setCanal} />
-      <TextInput
-        style={[styles.input, styles.multiline]}
-        placeholder="Histórico de serviços"
-        value={historico}
-        onChangeText={setHistorico}
-        multiline
-      />
+      <TextInput style={styles.input} placeholder="Idade" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />
+      <TextInput style={styles.input} placeholder="Modelo do veículo" value={form.modelo} onChangeText={(v) => update('modelo', v)} />
+      <TextInput style={styles.input} placeholder="Forma de pagamento" value={form.formaPagamento} onChangeText={(v) => update('formaPagamento', v)} />
+      <TextInput style={styles.input} placeholder="Canal de compra" value={form.canalCompra} onChangeText={(v) => update('canalCompra', v)} />
+      <TextInput style={styles.input} placeholder="Histórico com a marca" value={form.historicoMarca} onChangeText={(v) => update('historicoMarca', v)} />
 
-      <TouchableOpacity style={styles.button} onPress={handlePredict}>
-        <Text style={styles.buttonText}>Prever perfil</Text>
-      </TouchableOpacity>
+      <PrimaryButton title="Prever perfil" onPress={handlePredict} />
 
       {result && (
         <View style={styles.resultCard}>
-          <Text style={styles.resultTitle}>Resultado</Text>
-          <Text style={styles.item}><Text style={styles.label}>Perfil:</Text> {result.perfil}</Text>
-          <Text style={styles.item}><Text style={styles.label}>Probabilidade:</Text> {(result.probabilidade * 100).toFixed(1)}%</Text>
-          <Text style={styles.item}><Text style={styles.label}>Ação recomendada:</Text> {result.acao}</Text>
-          <Text style={styles.item}><Text style={styles.label}>Explicação:</Text> {explanation}</Text>
-          <Text style={styles.warning}>Aviso: esta predição é demonstrativa e não substitui validação do modelo em produção.</Text>
+          <Text style={styles.resultTitle}>Resultado da predição</Text>
+          <Text style={styles.row}><Text style={styles.label}>Perfil previsto:</Text> {result.perfil}</Text>
+          <Text style={styles.row}><Text style={styles.label}>Probabilidade simulada:</Text> {result.probabilidade}%</Text>
+          <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {result.acaoRecomendada}</Text>
+          <Text style={styles.row}><Text style={styles.label}>Explicação:</Text> {result.explicacao}</Text>
+          <Text style={styles.warning}>Predição demonstrativa baseada em dados do momento da compra.</Text>
         </View>
       )}
     </ScrollView>
@@ -84,22 +52,20 @@ export default function PredictionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, backgroundColor: '#f8fafc', flexGrow: 1 },
-  title: { fontSize: 20, fontWeight: '700', color: '#0f172a', marginBottom: 14 },
+  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1, gap: 10 },
+  title: { fontSize: 24, fontWeight: '700', color: colors.primaryDark },
+  subtitle: { color: colors.textGray, marginBottom: 8 },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 10,
+    borderColor: '#CBD5E1',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
-  multiline: { minHeight: 72, textAlignVertical: 'top' },
-  button: { backgroundColor: '#007AFF', padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 4 },
-  buttonText: { color: '#fff', fontWeight: '700' },
-  resultCard: { marginTop: 16, backgroundColor: '#fff', borderRadius: 10, padding: 14, borderWidth: 1, borderColor: '#dbeafe' },
-  resultTitle: { fontSize: 16, fontWeight: '700', marginBottom: 8, color: '#1e3a8a' },
-  item: { color: '#0f172a', marginBottom: 8 },
+  resultCard: { backgroundColor: colors.white, marginTop: 8, borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0', padding: 14, gap: 8 },
+  resultTitle: { fontWeight: '700', fontSize: 16, color: colors.fordBlue },
+  row: { color: '#1E293B', lineHeight: 20 },
   label: { fontWeight: '700' },
-  warning: { marginTop: 8, fontSize: 12, color: '#b45309' },
+  warning: { color: '#B45309', marginTop: 4, fontSize: 12 },
 });
