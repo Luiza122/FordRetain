@@ -9,6 +9,7 @@ import PredictionScreen from '../screens/PredictionScreen';
 import ProfilesScreen from '../screens/ProfilesScreen';
 import SecurityScreen from '../screens/SecurityScreen';
 import AboutScreen from '../screens/AboutScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
@@ -19,13 +20,14 @@ export default function AppNavigator() {
       <Stack.Navigator
         initialRouteName="Login"
         screenOptions={{
-          headerStyle: { backgroundColor: colors.primaryDark },
+          headerStyle: { backgroundColor: colors.navy },
           headerTintColor: colors.white,
           headerTitleStyle: { fontWeight: '700' },
-          contentStyle: { backgroundColor: '#F8FAFC' },
+          contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Cadastro" component={RegisterScreen} options={{ title: 'Criar conta' }} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Dashboard Executivo' }} />
         <Stack.Screen name="RiskClients" component={RiskClientsScreen} options={{ title: 'Clientes em Risco' }} />
         <Stack.Screen name="ClientDetails" component={ClientDetailsScreen} options={{ title: 'Detalhes do Cliente' }} />

@@ -50,8 +50,8 @@ export default function DashboardScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
-  title: { fontSize: 24, fontWeight: '700', color: colors.primaryDark, marginBottom: 12 },
+  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
+  title: { fontSize: 24, fontWeight: '700', color: colors.navy, marginBottom: 12 },
   section: { marginTop: 10, marginBottom: 8, fontSize: 16, fontWeight: '700', color: '#0F172A' },
   alertCard: { backgroundColor: '#FFF7ED', borderColor: '#FDBA74', borderWidth: 1, borderRadius: 10, padding: 10, marginBottom: 8 },
   alertText: { color: '#9A3412', fontWeight: '600' },
