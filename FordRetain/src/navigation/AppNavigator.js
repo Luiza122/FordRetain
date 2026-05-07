@@ -20,10 +20,10 @@ export default function AppNavigator() {
       <Stack.Navigator
         initialRouteName="Login"
         screenOptions={{
-          headerStyle: { backgroundColor: colors.primaryDark },
+          headerStyle: { backgroundColor: colors.navy },
           headerTintColor: colors.white,
           headerTitleStyle: { fontWeight: '700' },
-          contentStyle: { backgroundColor: '#F8FAFC' },
+          contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
