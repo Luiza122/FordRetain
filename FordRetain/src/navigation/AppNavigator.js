@@ -4,6 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import PredictionScreen from '../screens/PredictionScreen';
+import ProfilesScreen from '../screens/ProfilesScreen';
+import SecurityScreen from '../screens/SecurityScreen';
+import AboutScreen from '../screens/AboutScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import LeadsScreen from '../screens/LeadsScreen';
 import LeadDetailsScreen from '../screens/LeadDetailsScreen';
@@ -28,12 +32,12 @@ export default function AppNavigator() {
         />
         <Stack.Screen
           name="Prediction"
-          component={DashboardScreen}
+          component={PredictionScreen}
           options={{ title: 'Previsão de churn' }}
         />
-        <Stack.Screen name="Profiles" component={RegisterScreen} options={{ title: 'Perfis' }} />
-        <Stack.Screen name="Security" component={ForgotPasswordScreen} options={{ title: 'Segurança' }} />
-        <Stack.Screen name="About" component={DashboardScreen} options={{ title: 'Sobre' }} />
+        <Stack.Screen name="Profiles" component={ProfilesScreen} options={{ title: 'Perfis' }} />
+        <Stack.Screen name="Security" component={SecurityScreen} options={{ title: 'Segurança' }} />
+        <Stack.Screen name="About" component={AboutScreen} options={{ title: 'Sobre' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
