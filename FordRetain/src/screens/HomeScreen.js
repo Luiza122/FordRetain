@@ -163,7 +163,7 @@ export default function HomeScreen({ navigation, route }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>🛒 Produtos</Text>
+          <Text style={styles.headerTitle}>Produtos</Text>
           <TouchableOpacity
             style={styles.logoutBtn}
             onPress={() => navigation.navigate("Login")}
@@ -174,11 +174,11 @@ export default function HomeScreen({ navigation, route }) {
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>
-            {editingProductId ? "✏️ Editar produto" : "➕ Novo produto"}
+            {editingProductId ? "Editar produto" : "Novo produto"}
           </Text>
 
           <TouchableOpacity style={styles.scanBtn} onPress={handleOpenScanner}>
-            <Text style={styles.scanBtnText}>📷 Ler código de barras</Text>
+            <Text style={styles.scanBtnText}>Ler código de barras</Text>
           </TouchableOpacity>
 
           <TextInput
@@ -222,7 +222,7 @@ export default function HomeScreen({ navigation, route }) {
           )}
         </View>
 
-        <Text style={styles.sectionTitle}>📦 Produtos cadastrados</Text>
+        <Text style={styles.sectionTitle}>Produtos cadastrados</Text>
 
         {products.length === 0 ? (
           <Text style={styles.emptyText}>Nenhum produto cadastrado.</Text>
@@ -237,7 +237,7 @@ export default function HomeScreen({ navigation, route }) {
                 })}
               </Text>
               <Text style={styles.productBarcode}>
-                🔖 {item.barcode || "Sem código de barras"}
+                Código: {item.barcode || "Sem código de barras"}
               </Text>
               <View style={styles.productActions}>
                 <TouchableOpacity

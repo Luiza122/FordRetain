@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, 
   Alert, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator } from 'react-native';
 import { MOCK_CREDENTIALS } from '../data/mockAuth';
+import colors from '../styles/colors';
+import globalStyles from '../styles/globalStyles';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -51,16 +53,16 @@ export default function LoginScreen({ navigation }) {
       
       <View style={styles.inner}>
         <View style={styles.header}>
-          <Text style={styles.icon}>🚗</Text>
+          <Text style={styles.icon}>FR</Text>
           <Text style={styles.title}>FordRetain</Text>
-          <Text style={styles.subtitle}>Retention Intelligence</Text>
+          <Text style={styles.subtitle}>Plataforma de retenção preditiva para concessionárias Ford</Text>
         </View>
 
         <View style={styles.formContainer}>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <View style={styles.inputWrapper}>
-              <Text style={styles.inputIcon}>📧</Text>
+              <Text style={styles.inputIcon}>@</Text>
               <TextInput
                 placeholder="seu@email.com"
                 placeholderTextColor="#94a3b8"
@@ -77,7 +79,7 @@ export default function LoginScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Senha</Text>
             <View style={[styles.inputWrapper, styles.passwordWrapper]}>
-              <Text style={styles.inputIcon}>🔒</Text>
+              <Text style={styles.inputIcon}>•</Text>
               <TextInput
                 placeholder="Sua senha segura"
                 placeholderTextColor="#94a3b8"
@@ -92,7 +94,7 @@ export default function LoginScreen({ navigation }) {
                 disabled={loading}
                 style={styles.eyeIcon}
               >
-                <Text style={styles.eyeText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                <Text style={styles.eyeText}>{showPassword ? 'Ocultar' : 'Mostrar'}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -106,7 +108,6 @@ export default function LoginScreen({ navigation }) {
               <ActivityIndicator color="#ffffff" size="large" />
             ) : (
               <>
-                <Text style={styles.loginBtnIcon}>⚡</Text>
                 <Text style={styles.loginBtnText}>ENTRAR</Text>
               </>
             )}
@@ -130,7 +131,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: colors.primaryDark,
   },
 
   background: {
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    backgroundColor: '#1E5AA833',
   },
 
   bottomDecor: {
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    backgroundColor: '#47556933',
   },
 
   inner: {
@@ -170,23 +171,28 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    fontSize: 64,
+    fontSize: 28,
+    fontWeight: '700',
+    color: colors.primaryLight,
+    borderWidth: 1,
+    borderColor: colors.primaryLight,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 8,
     marginBottom: 12,
   },
 
   title: {
     fontSize: 40,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: colors.white,
     letterSpacing: 1,
   },
 
   subtitle: {
-    fontSize: 14,
-    color: '#60a5fa',
+    ...globalStyles.subtitle,
+    textAlign: 'center',
     marginTop: 8,
-    fontWeight: '600',
-    letterSpacing: 0.5,
   },
 
   formContainer: {
@@ -200,16 +206,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#e2e8f0',
+    color: colors.primaryLight,
     letterSpacing: 0.5,
   },
 
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: '#0B1F3ACC',
     borderWidth: 1.5,
-    borderColor: '#334155',
+    borderColor: colors.slate,
     borderRadius: 14,
     paddingHorizontal: 14,
     height: 54,
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
 
   input: {
     flex: 1,
-    color: '#f1f5f9',
+    color: colors.white,
     fontSize: 15,
     fontWeight: '500',
   },
@@ -240,8 +246,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
-    backgroundColor: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
-    borderRadius: 14,
+        borderRadius: 14,
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
@@ -249,7 +254,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     flexDirection: 'row',
     gap: 10,
-    shadowColor: '#3b82f6',
+    shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
       height: 8,
@@ -257,11 +262,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 12,
     elevation: 12,
-    backgroundColor: '#3b82f6',
+    backgroundColor: colors.primary,
   },
 
   loginBtnDisabled: {
-    backgroundColor: '#1e293b',
+    backgroundColor: colors.slate,
     opacity: 0.7,
   },
 
@@ -270,7 +275,7 @@ const styles = StyleSheet.create({
   },
 
   loginBtnText: {
-    color: '#ffffff',
+    color: colors.white,
     fontWeight: 'bold',
     fontSize: 16,
     letterSpacing: 1,
@@ -282,14 +287,14 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#94a3b8',
+    color: colors.slate,
     textAlign: 'center',
     fontSize: 14,
     fontWeight: '500',
   },
 
   linkBold: {
-    color: '#60a5fa',
+    color: colors.primaryLight,
     fontWeight: 'bold',
   },
 });
