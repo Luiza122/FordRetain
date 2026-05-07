@@ -1,50 +1,46 @@
 export function predictCustomerProfile(formData) {
   const { idade, regiao, formaPagamento, canalCompra, historicoMarca } = formData;
 
-  // Regra 1: à vista + já era cliente Ford = tendência de fidelidade.
-  if (formaPagamento === 'À vista' && historicoMarca === 'Já era cliente Ford') {
+  if (historicoMarca === 'Já era cliente Ford' && canalCompra === 'Concessionária') {
     return {
       perfil: 'Cliente Fiel',
-      probabilidade: 84,
-      acaoRecomendada: 'Convidar para programa premium de revisões e benefícios de fidelidade.',
-      explicacao: 'Pagamento à vista com histórico positivo indica alto vínculo com a marca.',
+      probabilidade: 86,
+      acaoRecomendada: 'Oferecer pacote premium anual com benefícios exclusivos de conveniência.',
+      explicacao: 'Histórico anterior com Ford e compra em concessionária indicam forte vínculo com a rede oficial.',
     };
   }
 
-  // Regra 2: promoção ou financiamento longo = sensível a preço.
   if (canalCompra === 'Promoção' || formaPagamento === 'Financiamento longo') {
     return {
       perfil: 'Cliente Econômico',
       probabilidade: 78,
-      acaoRecomendada: 'Enviar pacote de revisão com desconto e condições facilitadas.',
-      explicacao: 'Sinais de decisão orientada a preço e oportunidade comercial.',
+      acaoRecomendada: 'Enviar pacote de revisão com desconto progressivo e parcelamento facilitado.',
+      explicacao: 'Comportamento orientado a preço e prazo financeiro estendido aumenta sensibilidade a custo.',
     };
   }
 
-  // Regra 3: cliente jovem sem histórico com a marca = risco de abandono.
-  if (Number(idade) < 30 && historicoMarca === 'Primeiro Ford') {
+  if (historicoMarca === 'Primeiro Ford' && Number(idade || 0) <= 35) {
     return {
       perfil: 'Cliente de Abandono',
-      probabilidade: 81,
-      acaoRecomendada: 'Criar jornada de onboarding pós-venda com contato consultivo em 30 dias.',
-      explicacao: 'Perfil inicial com baixo vínculo histórico aumenta risco de evasão após a primeira revisão.',
+      probabilidade: 82,
+      acaoRecomendada: 'Executar onboarding pós-venda com contato consultivo e benefício de primeira revisão.',
+      explicacao: 'Primeiro contato com a marca e baixo histórico elevam o risco de evasão no ciclo inicial.',
     };
   }
 
-  // Regra 4: regiões com menor frequência tendem ao perfil esquecido.
-  if (['Norte', 'Centro-Oeste'].includes(regiao)) {
+  if (['Norte', 'Centro-Oeste'].includes(regiao) || historicoMarca === 'Baixa frequência') {
     return {
       perfil: 'Cliente Esquecido',
       probabilidade: 74,
-      acaoRecomendada: 'Disparar lembretes inteligentes de revisão e facilitar agendamento digital.',
-      explicacao: 'Padrões regionais de menor recorrência exigem estímulo ativo para retorno.',
+      acaoRecomendada: 'Disparar lembretes automatizados e facilitar agendamento por canal digital.',
+      explicacao: 'Sinais de esquecimento e baixa recorrência sugerem necessidade de estímulo ativo de retorno.',
     };
   }
 
   return {
     perfil: 'Cliente Econômico',
-    probabilidade: 65,
-    acaoRecomendada: 'Oferecer proposta de manutenção preventiva com valor previsível.',
-    explicacao: 'Cenário intermediário sem sinais extremos de fidelidade ou abandono.',
+    probabilidade: 67,
+    acaoRecomendada: 'Enviar proposta de manutenção preventiva com valor previsível.',
+    explicacao: 'Cenário neutro sem sinais fortes de fidelidade, abandono ou esquecimento.',
   };
 }

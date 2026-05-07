@@ -8,7 +8,7 @@ export default function ClientCard({ cliente, onPress }) {
         <Text style={styles.nome}>{cliente.nome}</Text>
         <Text style={styles.probabilidade}>{cliente.probabilidadeEvasao}%</Text>
       </View>
-      <Text style={styles.meta}>{cliente.modelo} • {cliente.regiao}</Text>
+      <Text style={styles.meta}>{cliente.modelo} • {cliente.ano} • {cliente.regiao}</Text>
       <ProfileBadge perfil={cliente.perfil} />
       <Text style={styles.acaoLabel}>Ação recomendada</Text>
       <Text style={styles.acao}>{cliente.acaoRecomendada}</Text>
