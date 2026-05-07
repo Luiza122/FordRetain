@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import colors from '../styles/colors';
+import PrimaryButton from '../components/PrimaryButton';
 
 const sections = [
   {
@@ -24,7 +25,7 @@ const sections = [
   },
 ];
 
-export default function AboutScreen() {
+export default function AboutScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sobre o Projeto</Text>
@@ -34,13 +35,15 @@ export default function AboutScreen() {
           <Text style={styles.text}>{section.text}</Text>
         </View>
       ))}
+
+      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
-  title: { fontSize: 24, fontWeight: '700', marginBottom: 12, color: colors.primaryDark },
+  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
+  title: { fontSize: 24, fontWeight: '700', marginBottom: 12, color: colors.navy },
   card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#E2E8F0' },
   heading: { fontSize: 16, fontWeight: '700', marginBottom: 6, color: colors.fordBlue },
   text: { color: '#334155', lineHeight: 20 },

@@ -4,7 +4,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import { predictCustomerProfile } from '../utils/predictionRules';
 import colors from '../styles/colors';
 
-export default function PredictionScreen() {
+export default function PredictionScreen({ navigation }) {
   const [form, setForm] = useState({
     idade: '',
     regiao: 'Sudeste',
@@ -47,23 +47,26 @@ export default function PredictionScreen() {
           <Text style={styles.warning}>Predição demonstrativa baseada em dados do momento da compra.</Text>
         </View>
       )}
+
+      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1, gap: 10 },
-  title: { fontSize: 24, fontWeight: '700', color: colors.primaryDark },
+  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1, gap: 10 },
+  title: { fontSize: 24, fontWeight: '700', color: colors.navy },
   subtitle: { color: colors.textGray, marginBottom: 8 },
   input: {
     backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: colors.border,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 12,
+    color: colors.navy,
   },
-  resultCard: { backgroundColor: colors.white, marginTop: 8, borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0', padding: 14, gap: 8 },
+  resultCard: { backgroundColor: colors.white, marginTop: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 8 },
   resultTitle: { fontWeight: '700', fontSize: 16, color: colors.fordBlue },
   row: { color: '#1E293B', lineHeight: 20 },
   label: { fontWeight: '700' },

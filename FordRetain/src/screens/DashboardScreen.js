@@ -1,10 +1,16 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { ScrollView, StyleSheet, Text, View, Animated } from 'react-native';
 import MetricCard from '../components/MetricCard';
 import PrimaryButton from '../components/PrimaryButton';
 import mockDashboard from '../data/mockDashboard';
 import colors from '../styles/colors';
 
 export default function DashboardScreen({ navigation }) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
+  }, [fadeAnim]);
   const {
     vinShareGeral,
     clientesMonitorados,
@@ -16,7 +22,7 @@ export default function DashboardScreen({ navigation }) {
   } = mockDashboard;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <Animated.ScrollView contentContainerStyle={styles.container} style={{ opacity: fadeAnim }}>
       <Text style={styles.title}>FordRetain — Dashboard Executivo</Text>
 
       <MetricCard title="VIN Share geral" value={`${vinShareGeral}%`} description="Percentual de retenção na rede oficial Ford." />
@@ -45,13 +51,13 @@ export default function DashboardScreen({ navigation }) {
         <PrimaryButton title="Segurança e privacidade" onPress={() => navigation.navigate('Security')} />
         <PrimaryButton title="Sobre o projeto" onPress={() => navigation.navigate('About')} />
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
-  title: { fontSize: 24, fontWeight: '700', color: colors.primaryDark, marginBottom: 12 },
+  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
+  title: { fontSize: 24, fontWeight: '700', color: colors.navy, marginBottom: 12 },
   section: { marginTop: 10, marginBottom: 8, fontSize: 16, fontWeight: '700', color: '#0F172A' },
   alertCard: { backgroundColor: '#FFF7ED', borderColor: '#FDBA74', borderWidth: 1, borderRadius: 10, padding: 10, marginBottom: 8 },
   alertText: { color: '#9A3412', fontWeight: '600' },
