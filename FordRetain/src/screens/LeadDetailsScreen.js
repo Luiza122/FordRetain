@@ -6,17 +6,17 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
  * voltar à lista de leads.
  */
 export default function LeadDetailsScreen({ route, navigation }) {
-  const { lead } = route.params;
+  const client = route.params?.client ?? route.params?.lead;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{lead.name}</Text>
-      <Text style={styles.detail}>Perfil: {lead.profile}</Text>
+      <Text style={styles.title}>{client.nome ?? client.name}</Text>
+      <Text style={styles.detail}>Perfil: {client.perfil ?? client.profile}</Text>
       <Text style={styles.detail}>
-        Probabilidade de evasão: {Math.round(lead.probability * 100)}%
+        Probabilidade de evasão: {Math.round((client.probabilidadeEvasao ?? client.probability) * 100)}%
       </Text>
       <Text style={styles.detail}>Ação recomendada:</Text>
-      <Text style={styles.suggestion}>{lead.suggestion}</Text>
+      <Text style={styles.suggestion}>{client.acaoRecomendada ?? client.suggestion}</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>

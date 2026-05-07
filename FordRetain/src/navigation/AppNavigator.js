@@ -5,7 +5,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import DashboardScreen from '../screens/DashboardScreen';
-import LeadsScreen from '../screens/LeadsScreen';
+import RiskClientsScreen from '../screens/RiskClientsScreen';
 import LeadDetailsScreen from '../screens/LeadDetailsScreen';
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +18,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Painel' }} />
         <Stack.Screen
           name="RiskClients"
-          component={LeadsScreen}
+          component={RiskClientsScreen}
           options={{ title: 'Clientes em risco' }}
         />
         <Stack.Screen
