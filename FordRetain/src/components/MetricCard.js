@@ -1,31 +1,26 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import colors from '../styles/colors';
 
-export default function MetricCard({ title, value }) {
+export default function MetricCard({ title, value, description }) {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.value}>{value}</Text>
+      {description ? <Text style={styles.description}>{description}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     padding: 14,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
   },
-  title: {
-    fontSize: 13,
-    color: '#475569',
-    marginBottom: 6,
-  },
-  value: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#0f172a',
-  },
+  title: { color: '#334155', fontSize: 13, fontWeight: '600' },
+  value: { color: colors.primaryDark, fontSize: 28, fontWeight: '700', marginTop: 6 },
+  description: { color: '#64748B', fontSize: 12, marginTop: 6 },
 });

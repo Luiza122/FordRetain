@@ -4,14 +4,11 @@ import mockClients from '../data/mockClients';
 import ClientCard from '../components/ClientCard';
 
 export default function RiskClientsScreen({ navigation }) {
-  const clients = useMemo(
-    () => [...mockClients].sort((a, b) => b.probabilidadeEvasao - a.probabilidadeEvasao),
-    []
-  );
+  const clients = useMemo(() => [...mockClients].sort((a, b) => b.probabilidadeEvasao - a.probabilidadeEvasao), []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Clientes em risco</Text>
+      <Text style={styles.title}>Clientes em Risco</Text>
       <FlatList
         data={clients}
         keyExtractor={(item) => String(item.id)}

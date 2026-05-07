@@ -6,7 +6,7 @@ export default function ClientCard({ cliente, onPress }) {
     <Pressable style={styles.card} onPress={() => onPress(cliente)}>
       <View style={styles.rowBetween}>
         <Text style={styles.nome}>{cliente.nome}</Text>
-        <Text style={styles.probabilidade}>{Math.round(cliente.probabilidadeEvasao * 100)}%</Text>
+        <Text style={styles.probabilidade}>{cliente.probabilidadeEvasao}%</Text>
       </View>
       <Text style={styles.meta}>{cliente.modelo} • {cliente.regiao}</Text>
       <ProfileBadge perfil={cliente.perfil} />
@@ -17,14 +17,7 @@ export default function ClientCard({ cliente, onPress }) {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    gap: 8,
-  },
+  card: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 14, borderWidth: 1, borderColor: '#E2E8F0', gap: 8 },
   rowBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   nome: { fontSize: 16, fontWeight: '700', color: '#0F172A', flex: 1, marginRight: 8 },
   probabilidade: { fontSize: 16, fontWeight: '800', color: '#DC2626' },

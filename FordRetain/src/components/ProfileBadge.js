@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
 
 const PROFILE_COLORS = {
-  Fiel: '#22C55E',
-  'Econômico': '#FACC15',
-  Esquecido: '#3B82F6',
-  Abandono: '#EF4444',
+  'Cliente Fiel': '#16A34A',
+  'Cliente Econômico': '#F59E0B',
+  'Cliente Esquecido': '#1E5AA8',
+  'Cliente de Abandono': '#DC2626',
 };
 
 export default function ProfileBadge({ perfil }) {
@@ -16,15 +16,6 @@ export default function ProfileBadge({ perfil }) {
 }
 
 const styles = StyleSheet.create({
-  badge: {
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    alignSelf: 'flex-start',
-  },
-  text: {
-    color: '#0F172A',
-    fontSize: 12,
-    fontWeight: '700',
-  },
+  badge: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
+  text: { color: '#FFFFFF', fontSize: 12, fontWeight: '700' },
 });
