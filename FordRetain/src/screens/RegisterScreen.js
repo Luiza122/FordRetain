@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, 
   KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator } from 'react-native';
 import { registerUser, loginUser } from '../firebase/authService';
+import colors from '../styles/colors';
+import globalStyles from '../styles/globalStyles';
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -69,7 +71,7 @@ export default function RegisterScreen({ navigation }) {
 
       <View style={styles.inner}>
         <View style={styles.header}>
-          <Text style={styles.icon}>🚗</Text>
+          <Text style={styles.icon}>FR</Text>
           <Text style={styles.title}>FordRetain</Text>
           <Text style={styles.subtitle}>Crie sua conta</Text>
         </View>
@@ -78,7 +80,7 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Nome Completo</Text>
             <View style={styles.inputWrapper}>
-              <Text style={styles.inputIcon}>👤</Text>
+              <Text style={styles.inputIcon}>N</Text>
               <TextInput
                 placeholder="Seu nome"
                 placeholderTextColor="#94a3b8"
@@ -93,7 +95,7 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <View style={styles.inputWrapper}>
-              <Text style={styles.inputIcon}>📧</Text>
+              <Text style={styles.inputIcon}>@</Text>
               <TextInput
                 placeholder="seu@email.com"
                 placeholderTextColor="#94a3b8"
@@ -110,7 +112,7 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Senha</Text>
             <View style={styles.inputWrapper}>
-              <Text style={styles.inputIcon}>🔒</Text>
+              <Text style={styles.inputIcon}>•</Text>
               <TextInput
                 placeholder="Mínimo 6 caracteres"
                 placeholderTextColor="#94a3b8"
@@ -125,7 +127,7 @@ export default function RegisterScreen({ navigation }) {
                 disabled={loading}
                 style={styles.eyeIcon}
               >
-                <Text style={styles.eyeText}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                <Text style={styles.eyeText}>{showPassword ? 'Ocultar' : 'Mostrar'}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -133,7 +135,7 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Confirme a Senha</Text>
             <View style={styles.inputWrapper}>
-              <Text style={styles.inputIcon}>🔒</Text>
+              <Text style={styles.inputIcon}>•</Text>
               <TextInput
                 placeholder="Confirme sua senha"
                 placeholderTextColor="#94a3b8"
@@ -148,7 +150,7 @@ export default function RegisterScreen({ navigation }) {
                 disabled={loading}
                 style={styles.eyeIcon}
               >
-                <Text style={styles.eyeText}>{showConfirmPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                <Text style={styles.eyeText}>{showConfirmPassword ? 'Ocultar' : 'Mostrar'}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -162,7 +164,7 @@ export default function RegisterScreen({ navigation }) {
               <ActivityIndicator color="#ffffff" size="large" />
             ) : (
               <>
-                <Text style={styles.registerBtnIcon}>✨</Text>
+                <Text style={styles.registerBtnIcon}></Text>
                 <Text style={styles.registerBtnText}>CADASTRAR</Text>
               </>
             )}
@@ -182,7 +184,7 @@ export default function RegisterScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: colors.primaryDark,
   },
 
   background: {
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    backgroundColor: '#1E5AA833',
   },
 
   bottomDecor: {
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    backgroundColor: '#47556933',
   },
 
   inner: {
@@ -222,23 +224,27 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    fontSize: 48,
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.primaryLight,
+    borderWidth: 1,
+    borderColor: colors.primaryLight,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     marginBottom: 8,
   },
 
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: colors.white,
     letterSpacing: 1,
   },
 
   subtitle: {
-    fontSize: 13,
-    color: '#60a5fa',
+    ...globalStyles.subtitle,
     marginTop: 4,
-    fontWeight: '600',
-    letterSpacing: 0.5,
   },
 
   formContainer: {
@@ -252,16 +258,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#e2e8f0',
+    color: colors.primaryLight,
     letterSpacing: 0.5,
   },
 
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+    backgroundColor: '#0B1F3ACC',
     borderWidth: 1.5,
-    borderColor: '#334155',
+    borderColor: colors.slate,
     borderRadius: 12,
     paddingHorizontal: 12,
     height: 48,
@@ -274,7 +280,7 @@ const styles = StyleSheet.create({
 
   input: {
     flex: 1,
-    color: '#f1f5f9',
+    color: colors.white,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -288,7 +294,7 @@ const styles = StyleSheet.create({
   },
 
   registerBtn: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: colors.primary,
     borderRadius: 12,
     padding: 14,
     alignItems: 'center',
@@ -296,7 +302,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     flexDirection: 'row',
     gap: 8,
-    shadowColor: '#3b82f6',
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.35,
     shadowRadius: 12,
@@ -304,7 +310,7 @@ const styles = StyleSheet.create({
   },
 
   registerBtnDisabled: {
-    backgroundColor: '#1e293b',
+    backgroundColor: colors.slate,
     opacity: 0.7,
   },
 
@@ -313,7 +319,7 @@ const styles = StyleSheet.create({
   },
 
   registerBtnText: {
-    color: '#ffffff',
+    color: colors.white,
     fontWeight: 'bold',
     fontSize: 14,
     letterSpacing: 0.5,
@@ -325,13 +331,13 @@ const styles = StyleSheet.create({
 
   link: {
     textAlign: 'center',
-    color: '#94a3b8',
+    color: colors.slate,
     fontSize: 13,
     fontWeight: '500',
   },
 
   linkBold: {
     fontWeight: 'bold',
-    color: '#60a5fa',
+    color: colors.primaryLight,
   },
 });

@@ -67,7 +67,7 @@ export default function BarcodeScannerScreen({ navigation, route }) {
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>🔖 Leitor de Código de Barras</Text>
+        <Text style={styles.panelTitle}>Leitor de Código de Barras</Text>
         <Text style={styles.panelSubtitle}>
           {scanned
             ? 'Código lido! Redirecionando...'

@@ -3,6 +3,8 @@ import {
   View, Text, TextInput, TouchableOpacity, Alert,
   KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { resetUserPassword } from '../firebase/authService';
+import colors from '../styles/colors';
+import globalStyles from '../styles/globalStyles';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -75,7 +77,7 @@ export default function ForgotPasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1e102f',
+    backgroundColor: colors.primaryDark,
   },
 
   inner: {
@@ -87,37 +89,37 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: '800',
-    color: '#faf5ff',
+    color: colors.white,
     textAlign: 'center',
     marginBottom: 8,
   },
 
   subtitle: {
-    fontSize: 15,
-    color: '#d8b4fe',
+    ...globalStyles.subtitle,
     textAlign: 'center',
     marginBottom: 32,
+    fontSize: 15,
     lineHeight: 22,
   },
 
   input: {
-    backgroundColor: '#2e1065',
+    backgroundColor: colors.primaryLight,
     borderWidth: 1.5,
-    borderColor: '#7e22ce',
+    borderColor: colors.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
-    color: '#faf5ff',
+    color: colors.white,
     fontSize: 15,
   },
 
   resetBtn: {
-    backgroundColor: '#9333ea',
+    backgroundColor: colors.primary,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
     marginBottom: 22,
-    shadowColor: '#a855f7',
+    shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#e9d5ff',
+    color: colors.primaryLight,
     textAlign: 'center',
     fontSize: 15,
     fontWeight: '600',
