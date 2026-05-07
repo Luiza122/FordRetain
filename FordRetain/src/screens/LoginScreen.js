@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.card}>
         <Text style={styles.title}>FordRetain</Text>
-        <Text style={styles.subtitle}>Plataforma de retenção preditiva para concessionárias Ford</Text>
+        <Text style={styles.subtitle}>Plataforma de retenção preditiva para veículos Ford</Text>
 
         <TextInput
           style={styles.input}
@@ -56,6 +56,10 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.secondaryButtonText}>Ir para cadastro</Text>
+        </TouchableOpacity>
+
         <View style={styles.demoBox}>
           <Text style={styles.demoTitle}>Login de teste</Text>
           <Text style={styles.demoText}>E-mail: gerente@fordretain.com</Text>
@@ -74,6 +78,8 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, borderColor: '#CBD5E1', borderRadius: 10, padding: 12, marginBottom: 10, color: '#0F172A' },
   button: { backgroundColor: colors.primary, borderRadius: 10, padding: 14, alignItems: 'center', marginTop: 4 },
   buttonText: { color: colors.white, fontWeight: '700' },
+  secondaryButton: { borderWidth: 1, borderColor: colors.primary, borderRadius: 10, padding: 12, alignItems: 'center', marginTop: 10 },
+  secondaryButtonText: { color: colors.primary, fontWeight: '700' },
   demoBox: { marginTop: 14, backgroundColor: '#EAF2FF', borderRadius: 10, padding: 12 },
   demoTitle: { color: '#0F172A', fontWeight: '700', marginBottom: 4 },
   demoText: { color: '#334155' },

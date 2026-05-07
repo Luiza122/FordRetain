@@ -1,6 +1,6 @@
 const mockDashboard = {
   vinShareGeral: 73.4,
-  totalClientes: 1280,
+  clientesMonitorados: 1280,
   clientesAltoRisco: 146,
   agendamentosRecomendados: 93,
   vinSharePorRegiao: [
@@ -16,6 +16,11 @@ const mockDashboard = {
     { modelo: 'Ford Maverick', valor: 76.2 },
     { modelo: 'Ford Transit', valor: 69.8 },
     { modelo: 'Ford Bronco Sport', valor: 73.0 },
+  ],
+  alertas: [
+    'Aumento de evasão em clientes de primeiro Ford no Norte (+8%).',
+    'Modelo Ford Ka 2018-2019 com queda de recorrência de revisões.',
+    'Campanhas de preço no Sudeste elevaram retorno em 12%.',
   ],
 };
 

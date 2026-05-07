@@ -1,9 +1,12 @@
-# FORDRETAIN — Plataforma de Retenção Preditiva
+# FordRetain
 
-O **FordRetain** é um app mobile desenvolvido em React Native + Expo para apoiar gerentes de concessionária na retenção de clientes de pós-venda Ford, com foco em aumento de **VIN Share**.
+Aplicativo mobile em React Native/Expo para retenção preditiva no pós-venda de concessionárias Ford.
 
-## Problema de negócio
-Após o período de garantia, parte dos clientes deixa de fazer revisões na rede autorizada. Isso reduz o VIN Share e impacta receita de serviços. O FordRetain identifica clientes com risco de evasão e sugere ações personalizadas.
+## Objetivo
+O FordRetain ajuda o gerente da concessionária a:
+- acompanhar VIN Share;
+- identificar clientes com maior risco de evasão;
+- executar ações personalizadas de retenção.
 
 ## Como rodar
 ```bash
@@ -13,80 +16,75 @@ npx expo start
 ```
 
 ## Login de teste
-- E-mail: `gerente@fordretain.com`
-- Senha: `123456`
+- **E-mail:** `gerente@fordretain.com`
+- **Senha:** `123456`
+
+## Telas do app
+1. LoginScreen
+2. DashboardScreen
+3. RiskClientsScreen
+4. ClientDetailsScreen
+5. PredictionScreen
+6. ProfilesScreen
+7. SecurityScreen
+8. AboutScreen
 
 ## Estrutura principal
 ```text
-src/
-  data/
-    mockAuth.js
-    mockClients.js
-    mockDashboard.js
-  navigation/
-    AppNavigator.js
-  screens/
-    LoginScreen.js
-    DashboardScreen.js
-    RiskClientsScreen.js
-    LeadDetailsScreen.js
-    PredictionScreen.js
-    ProfilesScreen.js
-    SecurityScreen.js
-    AboutScreen.js
-  components/
-    MetricCard.js
-    ClientCard.js
-    ProfileBadge.js
-    PrimaryButton.js
-  styles/
-    colors.js
-    globalStyles.js
-  utils/
-    predictionRules.js
+FordRetain/
+  App.js
+  src/
+    components/
+      MetricCard.js
+      ClientCard.js
+      ProfileBadge.js
+      PrimaryButton.js
+    data/
+      mockClients.js
+      mockDashboard.js
+      mockAuth.js
+    navigation/
+      AppNavigator.js
+    screens/
+      LoginScreen.js
+      DashboardScreen.js
+      RiskClientsScreen.js
+      ClientDetailsScreen.js
+      PredictionScreen.js
+      ProfilesScreen.js
+      SecurityScreen.js
+      AboutScreen.js
+    styles/
+      colors.js
+      globalStyles.js
+    utils/
+      predictionRules.js
 ```
 
-## Telas disponíveis
-1. **Login** (mockado)
-2. **Dashboard** com KPI de VIN Share e atalhos
-3. **Clientes em Risco** ordenados por maior risco
-4. **Detalhes do Cliente** com ação planejada
-5. **Predição de Cliente** com regras simuladas
-6. **Perfis de Comportamento**
-7. **Segurança e Privacidade**
-8. **Sobre o Projeto**
-
-## Lógica de predição (mock)
-Arquivo: `src/utils/predictionRules.js`.
-
-Regras simples:
-- À vista + já cliente Ford → maior chance de **Cliente Fiel**.
-- Promoção ou financiamento longo → maior chance de **Cliente Econômico**.
-- Cliente jovem sem histórico → maior chance de **Cliente de Abandono**.
-- Regiões com menor frequência → maior chance de **Cliente Esquecido**.
+## Predição mockada
+A tela de predição usa `src/utils/predictionRules.js` com regras heurísticas:
+- cliente Ford + compra em concessionária → maior chance de **Cliente Fiel**;
+- promoção/financiamento longo → maior chance de **Cliente Econômico**;
+- primeiro Ford + baixo vínculo inicial → maior chance de **Cliente de Abandono**;
+- baixa frequência/esquecimento → maior chance de **Cliente Esquecido**.
 
 Retorno da função:
-```js
-{
-  perfil,
-  probabilidade,
-  acaoRecomendada,
-  explicacao
-}
-```
+- perfil;
+- probabilidade;
+- ação recomendada;
+- explicação da regra.
 
-## Como o projeto evita data leakage
-- Usa dados mock locais para demonstração sem uso de dados reais de produção.
-- Predição é declaradamente demonstrativa e baseada em sinais de entrada do momento da compra.
-- Não há treino de modelo com variáveis futuras no app mobile.
+## Evolução para IA/ML real
+Em produção, as regras mockadas podem ser substituídas por API com modelo supervisionado treinado em histórico de revisões, recorrência e dados de relacionamento.
 
-## Evolução futura com IA/ML real
-- API de classificação com modelo supervisionado versionado.
-- Feature store e validação temporal.
-- Monitoramento de drift e performance de retenção.
+## Como evitamos data leakage
+- separação temporal entre treino e validação;
+- exclusão de variáveis que só existem após o evento de evasão;
+- uso de features disponíveis apenas até o instante da decisão;
+- auditoria de atributos e versionamento de datasets/modelos.
 
 ## Tecnologias
 - React Native
 - Expo
-- JavaScript
 - React Navigation
+- JavaScript (ES6)

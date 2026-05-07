@@ -1,5 +1,6 @@
-import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { Pressable, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import ProfileBadge from './ProfileBadge';
+import colors from '../styles/colors';
 
 export default function ClientCard({ cliente, onPress }) {
   return (
@@ -8,10 +9,14 @@ export default function ClientCard({ cliente, onPress }) {
         <Text style={styles.nome}>{cliente.nome}</Text>
         <Text style={styles.probabilidade}>{cliente.probabilidadeEvasao}%</Text>
       </View>
-      <Text style={styles.meta}>{cliente.modelo} • {cliente.regiao}</Text>
+      <Text style={styles.meta}>{cliente.modelo} • {cliente.ano} • {cliente.regiao}</Text>
       <ProfileBadge perfil={cliente.perfil} />
       <Text style={styles.acaoLabel}>Ação recomendada</Text>
       <Text style={styles.acao}>{cliente.acaoRecomendada}</Text>
+
+      <TouchableOpacity style={styles.detailsButton} onPress={() => onPress(cliente)}>
+        <Text style={styles.detailsText}>Ver detalhes do cliente</Text>
+      </TouchableOpacity>
     </Pressable>
   );
 }
@@ -24,4 +29,6 @@ const styles = StyleSheet.create({
   meta: { fontSize: 13, color: '#475569' },
   acaoLabel: { fontSize: 12, color: '#334155', fontWeight: '700' },
   acao: { fontSize: 13, color: '#1E293B' },
+  detailsButton: { backgroundColor: colors.primary, borderRadius: 8, paddingVertical: 10, alignItems: 'center', marginTop: 4 },
+  detailsText: { color: colors.white, fontWeight: '700' },
 });

@@ -5,16 +5,24 @@ import mockDashboard from '../data/mockDashboard';
 import colors from '../styles/colors';
 
 export default function DashboardScreen({ navigation }) {
-  const { vinShareGeral, totalClientes, clientesAltoRisco, agendamentosRecomendados, vinSharePorRegiao, vinSharePorModelo } = mockDashboard;
+  const {
+    vinShareGeral,
+    clientesMonitorados,
+    clientesAltoRisco,
+    agendamentosRecomendados,
+    vinSharePorRegiao,
+    vinSharePorModelo,
+    alertas,
+  } = mockDashboard;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>FordRetain — Dashboard Executivo</Text>
 
-      <MetricCard title="VIN Share geral" value={`${vinShareGeral}%`} description="Percentual atual de permanência na rede oficial." />
-      <MetricCard title="Clientes monitorados" value={String(totalClientes)} description="Base ativa de clientes acompanhados no ciclo de pós-venda." />
-      <MetricCard title="Clientes em alto risco" value={String(clientesAltoRisco)} description="Clientes que exigem ação de retenção imediata." />
-      <MetricCard title="Agendamentos recomendados" value={String(agendamentosRecomendados)} description="Ações sugeridas com maior potencial de impacto." />
+      <MetricCard title="VIN Share geral" value={`${vinShareGeral}%`} description="Percentual de retenção na rede oficial Ford." />
+      <MetricCard title="Clientes monitorados" value={String(clientesMonitorados)} description="Carteira ativa acompanhada por sinais preditivos." />
+      <MetricCard title="Clientes em alto risco" value={String(clientesAltoRisco)} description="Prioridade para atuação imediata de retenção." />
+      <MetricCard title="Agendamentos recomendados" value={String(agendamentosRecomendados)} description="Ações de pós-venda sugeridas para recuperação." />
 
       <Text style={styles.section}>VIN Share por região</Text>
       {vinSharePorRegiao.map((item) => <MetricCard key={item.regiao} title={item.regiao} value={`${item.valor}%`} />)}
@@ -22,12 +30,21 @@ export default function DashboardScreen({ navigation }) {
       <Text style={styles.section}>VIN Share por modelo</Text>
       {vinSharePorModelo.map((item) => <MetricCard key={item.modelo} title={item.modelo} value={`${item.valor}%`} />)}
 
+      <Text style={styles.section}>Alertas estratégicos</Text>
+      {alertas.map((alerta) => (
+        <View key={alerta} style={styles.alertCard}>
+          <Text style={styles.alertText}>{alerta}</Text>
+        </View>
+      ))}
+
+      <Text style={styles.section}>Menu FordRetain</Text>
       <View style={styles.actions}>
         <PrimaryButton title="Clientes em risco" onPress={() => navigation.navigate('RiskClients')} />
         <PrimaryButton title="Predição de cliente" onPress={() => navigation.navigate('Prediction')} />
         <PrimaryButton title="Perfis de comportamento" onPress={() => navigation.navigate('Profiles')} />
         <PrimaryButton title="Segurança e privacidade" onPress={() => navigation.navigate('Security')} />
         <PrimaryButton title="Sobre o projeto" onPress={() => navigation.navigate('About')} />
+        <PrimaryButton title="Sair e voltar ao login" onPress={() => navigation.replace('Login')} />
       </View>
     </ScrollView>
   );
@@ -35,7 +52,9 @@ export default function DashboardScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
-  title: { fontSize: 22, fontWeight: '700', color: colors.primaryDark, marginBottom: 10 },
+  title: { fontSize: 24, fontWeight: '700', color: colors.primaryDark, marginBottom: 12 },
   section: { marginTop: 10, marginBottom: 8, fontSize: 16, fontWeight: '700', color: '#0F172A' },
-  actions: { marginTop: 8, gap: 10, marginBottom: 18 },
+  alertCard: { backgroundColor: '#FFF7ED', borderColor: '#FDBA74', borderWidth: 1, borderRadius: 10, padding: 10, marginBottom: 8 },
+  alertText: { color: '#9A3412', fontWeight: '600' },
+  actions: { marginVertical: 10, gap: 10, marginBottom: 24 },
 });

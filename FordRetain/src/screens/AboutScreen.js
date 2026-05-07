@@ -1,48 +1,47 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import colors from '../styles/colors';
+
+const sections = [
+  {
+    title: 'Problema de negócio',
+    text: 'Concessionárias perdem receitas de pós-venda quando clientes migram para oficinas independentes. O FordRetain antecipa risco de evasão para ação rápida.',
+  },
+  {
+    title: 'O que é VIN Share',
+    text: 'VIN Share representa a participação da rede oficial no volume total de serviços realizados para veículos Ford ao longo do ciclo de vida.',
+  },
+  {
+    title: 'Como o FordRetain ajuda',
+    text: 'O app consolida métricas, prioriza clientes em risco e recomenda ações personalizadas para elevar retenção e rentabilidade da concessionária.',
+  },
+  {
+    title: 'Arquitetura',
+    text: 'Base histórica → Clustering → Perfis → Classificação → API → App Mobile.',
+  },
+  {
+    title: 'Relação com disciplinas',
+    text: 'IA/ML, Mobile, Web Services, Cybersecurity e QA/Testing atuam de forma integrada no desenho e evolução da solução.',
+  },
+];
 
 export default function AboutScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Sobre o Ford Retain</Text>
-
-      <View style={styles.card}>
-        <Text style={styles.heading}>Problema de negócio</Text>
-        <Text style={styles.text}>
-          Reduzir churn no pós-venda e aumentar retenção em serviços de concessionária, combatendo
-          evasão para oficinas independentes.
-        </Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.heading}>Impacto no VIN Share</Text>
-        <Text style={styles.text}>
-          A melhoria da retenção eleva o VIN Share ao aumentar a participação da rede autorizada nas
-          manutenções e revisões ao longo do ciclo de vida do veículo.
-        </Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.heading}>Arquitetura analítica</Text>
-        <Text style={styles.text}>
-          Base histórica → clustering → perfis → classificação → API → app.
-        </Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.heading}>Disciplinas FIAP envolvidas</Text>
-        <Text style={styles.text}>
-          Data Science e Machine Learning, Mobile Application Development, Cloud Computing,
-          Cybersecurity, Engenharia de Software e UX.
-        </Text>
-      </View>
+      <Text style={styles.title}>Sobre o Projeto</Text>
+      {sections.map((section) => (
+        <View key={section.title} style={styles.card}>
+          <Text style={styles.heading}>{section.title}</Text>
+          <Text style={styles.text}>{section.text}</Text>
+        </View>
+      ))}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, backgroundColor: '#f8fafc', flexGrow: 1 },
-  title: { fontSize: 20, fontWeight: '700', marginBottom: 12, color: '#0f172a' },
-  card: { backgroundColor: '#fff', borderRadius: 10, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#e2e8f0' },
-  heading: { fontSize: 16, fontWeight: '700', marginBottom: 6, color: '#1e3a8a' },
+  container: { padding: 16, backgroundColor: '#F8FAFC', flexGrow: 1 },
+  title: { fontSize: 24, fontWeight: '700', marginBottom: 12, color: colors.primaryDark },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#E2E8F0' },
+  heading: { fontSize: 16, fontWeight: '700', marginBottom: 6, color: colors.fordBlue },
   text: { color: '#334155', lineHeight: 20 },
 });
