@@ -1,46 +1,21 @@
 export function predictCustomerProfile(formData) {
-  const { idade, regiao, formaPagamento, canalCompra, historicoMarca } = formData;
+  const tempo = Number(formData.tempoUltimaRevisaoMeses || 0);
+  const idadeVeiculo = Number(formData.idadeVeiculoAnos || 0);
+  const distancia = Number(formData.distanciaConcessionariaKm || 0);
+  const frequencia = Number(formData.frequenciaVisitasAno || 0);
+  const garantiaVencida = formData.garantiaStatus === 'Vencida';
 
-  if (historicoMarca === 'Já era cliente Ford' && canalCompra === 'Concessionária') {
-    return {
-      perfil: 'Cliente Fiel',
-      probabilidade: 86,
-      acaoRecomendada: 'Oferecer pacote premium anual com benefícios exclusivos de conveniência.',
-      explicacao: 'Histórico anterior com Ford e compra em concessionária indicam forte vínculo com a rede oficial.',
-    };
-  }
+  let score = 0;
+  if (tempo >= 9) score += 25;
+  if (idadeVeiculo >= 6) score += 10;
+  if (distancia >= 20) score += 15;
+  if (frequencia <= 1) score += 20;
+  if (garantiaVencida) score += 20;
+  if (formData.perfilBase === 'Cliente Econômico') score += 10;
 
-  if (canalCompra === 'Promoção' || formaPagamento === 'Financiamento longo') {
-    return {
-      perfil: 'Cliente Econômico',
-      probabilidade: 78,
-      acaoRecomendada: 'Enviar pacote de revisão com desconto progressivo e parcelamento facilitado.',
-      explicacao: 'Comportamento orientado a preço e prazo financeiro estendido aumenta sensibilidade a custo.',
-    };
-  }
+  const probabilidade = Math.min(95, Math.max(15, score));
 
-  if (historicoMarca === 'Primeiro Ford' && Number(idade || 0) <= 35) {
-    return {
-      perfil: 'Cliente de Abandono',
-      probabilidade: 82,
-      acaoRecomendada: 'Executar onboarding pós-venda com contato consultivo e benefício de primeira revisão.',
-      explicacao: 'Primeiro contato com a marca e baixo histórico elevam o risco de evasão no ciclo inicial.',
-    };
-  }
-
-  if (['Norte', 'Centro-Oeste'].includes(regiao) || historicoMarca === 'Baixa frequência') {
-    return {
-      perfil: 'Cliente Esquecido',
-      probabilidade: 74,
-      acaoRecomendada: 'Disparar lembretes automatizados e facilitar agendamento por canal digital.',
-      explicacao: 'Sinais de esquecimento e baixa recorrência sugerem necessidade de estímulo ativo de retorno.',
-    };
-  }
-
-  return {
-    perfil: 'Cliente Econômico',
-    probabilidade: 67,
-    acaoRecomendada: 'Enviar proposta de manutenção preventiva com valor previsível.',
-    explicacao: 'Cenário neutro sem sinais fortes de fidelidade, abandono ou esquecimento.',
-  };
+  if (probabilidade >= 75) return { perfil: 'Cliente em Risco', probabilidade, nivelRisco: 'Alto', acaoRecomendada: 'Contato preventivo imediato com proposta personalizada.', explicacao: 'Sinais combinados de baixa recorrência, distância e pós-garantia elevam risco de evasão.' };
+  if (probabilidade >= 50) return { perfil: 'Cliente Esquecido', probabilidade, nivelRisco: 'Médio', acaoRecomendada: 'Lembretes multicanais e facilidade de agendamento.', explicacao: 'Risco moderado por intervalo de revisão e baixa frequência, com potencial de recuperação.' };
+  return { perfil: 'Cliente Fiel', probabilidade, nivelRisco: 'Baixo', acaoRecomendada: 'Manter relacionamento com benefícios de fidelização.', explicacao: 'Cliente com indícios de vínculo recorrente à rede autorizada.' };
 }

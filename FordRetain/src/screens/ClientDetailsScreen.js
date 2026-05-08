@@ -5,48 +5,29 @@ import colors from '../styles/colors';
 
 export default function ClientDetailsScreen({ route, navigation }) {
   const client = route.params?.client;
-
   if (!client) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Cliente não encontrado.</Text>
-        <PrimaryButton title="Voltar para clientes em risco" onPress={() => navigation.navigate('RiskClients')} />
-      </View>
-    );
+    return <View style={styles.empty}><Text style={styles.emptyText}>Cliente não encontrado. Retorne para a lista e selecione novamente.</Text><PrimaryButton title="Voltar" onPress={() => navigation.navigate('Clients')} /></View>;
   }
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{client.nome}</Text>
-      <Text style={styles.subtitle}>{client.modelo} • {client.ano} • {client.regiao}</Text>
-
-      <View style={styles.card}>
-        <ProfileBadge perfil={client.perfil} />
-        <Text style={styles.item}><Text style={styles.label}>Canal de compra:</Text> {client.canalCompra}</Text>
-        <Text style={styles.item}><Text style={styles.label}>Forma de pagamento:</Text> {client.formaPagamento}</Text>
-        <Text style={styles.item}><Text style={styles.label}>Histórico com a marca:</Text> {client.historicoMarca}</Text>
-        <Text style={styles.item}><Text style={styles.label}>Probabilidade de evasão:</Text> {client.probabilidadeEvasao}%</Text>
-        <Text style={styles.item}><Text style={styles.label}>Motivo provável da evasão:</Text> {client.motivo}</Text>
+      <Text style={styles.subtitle}>{client.veiculo} • {client.ano} • {client.regiao}</Text>
+      <View style={styles.card}><ProfileBadge perfil={client.perfil} />
+        <Text style={styles.item}><Text style={styles.label}>Risco previsto:</Text> {client.riscoEvasao}%</Text>
+        <Text style={styles.item}><Text style={styles.label}>Tempo sem revisão:</Text> {client.tempoUltimaRevisaoMeses} meses</Text>
+        <Text style={styles.item}><Text style={styles.label}>Idade do veículo:</Text> {client.idadeVeiculoAnos} anos</Text>
+        <Text style={styles.item}><Text style={styles.label}>Garantia:</Text> {client.garantiaStatus}</Text>
+        <Text style={styles.item}><Text style={styles.label}>Histórico:</Text> {client.historicoManutencao}</Text>
+        <Text style={styles.item}><Text style={styles.label}>Frequência:</Text> {client.frequenciaVisitasAno}/ano</Text>
+        <Text style={styles.item}><Text style={styles.label}>Gasto anual:</Text> R$ {client.valorGastoServicos}</Text>
+        <Text style={styles.item}><Text style={styles.label}>Distância:</Text> {client.distanciaConcessionariaKm} km</Text>
+        <Text style={styles.item}><Text style={styles.label}>Fatores de risco:</Text> {client.fatoresRisco.join(', ')}</Text>
         <Text style={styles.item}><Text style={styles.label}>Ação recomendada:</Text> {client.acaoRecomendada}</Text>
       </View>
-
-      <PrimaryButton
-        title="Marcar ação como planejada"
-        onPress={() => Alert.alert('Ação planejada com sucesso', 'A concessionária poderá acompanhar este cliente na próxima etapa.')}
-      />
-      <PrimaryButton title="Voltar para clientes em risco" variant="secondary" onPress={() => navigation.navigate('RiskClients')} />
-      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
+      <PrimaryButton title="Aplicar recomendação" onPress={() => Alert.alert('Simulação', 'Recomendação aplicada e registrada no CRM da concessionária.')} />
+      <PrimaryButton title="Registrar contato" onPress={() => Alert.alert('Simulação', 'Contato registrado com sucesso para acompanhamento.')} />
+      <PrimaryButton title="Voltar" variant="secondary" onPress={() => navigation.goBack()} />
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 16, backgroundColor: colors.background, gap: 12 },
-  title: { fontSize: 26, fontWeight: '700', color: colors.navy },
-  subtitle: { color: colors.textGray, marginBottom: 4 },
-  card: { backgroundColor: colors.white, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 10 },
-  item: { color: '#1E293B', lineHeight: 21 },
-  label: { fontWeight: '700', color: colors.navy },
-  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background, padding: 16 },
-  emptyText: { color: colors.textGray, fontSize: 16, marginBottom: 10 },
-});
+const styles=StyleSheet.create({container:{padding:16,backgroundColor:colors.background,flexGrow:1,gap:10},title:{fontSize:26,fontWeight:'800',color:colors.navy},subtitle:{color:colors.textGray},card:{backgroundColor:colors.white,borderRadius:14,borderWidth:1,borderColor:colors.border,padding:14,gap:8},item:{color:'#1E293B',lineHeight:20},label:{fontWeight:'700',color:colors.navy},empty:{flex:1,justifyContent:'center',padding:20,backgroundColor:colors.background},emptyText:{marginBottom:8,color:colors.textGray}});

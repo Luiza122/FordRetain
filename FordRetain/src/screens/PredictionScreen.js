@@ -5,70 +5,24 @@ import { predictCustomerProfile } from '../utils/predictionRules';
 import colors from '../styles/colors';
 
 export default function PredictionScreen({ navigation }) {
-  const [form, setForm] = useState({
-    idade: '',
-    regiao: 'Sudeste',
-    modelo: 'Ford Ranger',
-    formaPagamento: 'Financiamento',
-    canalCompra: 'Concessionária',
-    historicoMarca: 'Primeiro Ford',
-  });
+  const [form, setForm] = useState({ tempoUltimaRevisaoMeses: '', idadeVeiculoAnos: '', distanciaConcessionariaKm: '', frequenciaVisitasAno: '', garantiaStatus: 'Vencida', perfilBase: 'Cliente Econômico' });
   const [result, setResult] = useState(null);
-
-  function update(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  function handlePredict() {
-    setResult(predictCustomerProfile(form));
-  }
+  const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Predição de Novo Cliente</Text>
-      <Text style={styles.subtitle}>Preencha os dados para simular o perfil de retenção.</Text>
-
-      <TextInput style={styles.input} placeholder="Idade" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />
-      <TextInput style={styles.input} placeholder="Modelo do veículo" value={form.modelo} onChangeText={(v) => update('modelo', v)} />
-      <TextInput style={styles.input} placeholder="Forma de pagamento" value={form.formaPagamento} onChangeText={(v) => update('formaPagamento', v)} />
-      <TextInput style={styles.input} placeholder="Canal de compra" value={form.canalCompra} onChangeText={(v) => update('canalCompra', v)} />
-      <TextInput style={styles.input} placeholder="Histórico com a marca" value={form.historicoMarca} onChangeText={(v) => update('historicoMarca', v)} />
-
-      <PrimaryButton title="Prever perfil" onPress={handlePredict} />
-
-      {result && (
-        <View style={styles.resultCard}>
-          <Text style={styles.resultTitle}>Resultado da predição</Text>
-          <Text style={styles.row}><Text style={styles.label}>Perfil previsto:</Text> {result.perfil}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Probabilidade simulada:</Text> {result.probabilidade}%</Text>
-          <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {result.acaoRecomendada}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Explicação:</Text> {result.explicacao}</Text>
-          <Text style={styles.warning}>Predição demonstrativa baseada em dados do momento da compra.</Text>
-        </View>
-      )}
-
-      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
+      <Text style={styles.title}>Classificação de risco</Text>
+      <Text style={styles.subtitle}>Simulação acadêmica para estimar risco de evasão no pós-venda Ford.</Text>
+      <TextInput style={styles.input} placeholder="Tempo desde a última revisão (meses)" value={form.tempoUltimaRevisaoMeses} onChangeText={(v) => update('tempoUltimaRevisaoMeses', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Idade do veículo (anos)" value={form.idadeVeiculoAnos} onChangeText={(v) => update('idadeVeiculoAnos', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Distância da concessionária (km)" value={form.distanciaConcessionariaKm} onChangeText={(v) => update('distanciaConcessionariaKm', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Frequência de visitas por ano" value={form.frequenciaVisitasAno} onChangeText={(v) => update('frequenciaVisitasAno', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Status da garantia (Ativa/Vencida)" value={form.garantiaStatus} onChangeText={(v) => update('garantiaStatus', v)} />
+      <TextInput style={styles.input} placeholder="Perfil base" value={form.perfilBase} onChangeText={(v) => update('perfilBase', v)} />
+      <PrimaryButton title="Prever perfil" onPress={() => setResult(predictCustomerProfile(form))} />
+      {result && <View style={styles.card}><Text style={styles.cardTitle}>Resultado</Text><Text style={styles.text}>Perfil previsto: {result.perfil}</Text><Text style={styles.text}>Probabilidade: {result.probabilidade}%</Text><Text style={styles.text}>Nível de risco: {result.nivelRisco}</Text><Text style={styles.text}>Ação recomendada: {result.acaoRecomendada}</Text><Text style={styles.text}>Explicação: {result.explicacao}</Text></View>}
+      <PrimaryButton title="Voltar" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: colors.background, flexGrow: 1, gap: 10 },
-  title: { fontSize: 24, fontWeight: '700', color: colors.navy },
-  subtitle: { color: colors.textGray, marginBottom: 8 },
-  input: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    color: colors.navy,
-  },
-  resultCard: { backgroundColor: colors.white, marginTop: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 8 },
-  resultTitle: { fontWeight: '700', fontSize: 16, color: colors.fordBlue },
-  row: { color: '#1E293B', lineHeight: 20 },
-  label: { fontWeight: '700' },
-  warning: { color: '#B45309', marginTop: 4, fontSize: 12 },
-});
+const styles=StyleSheet.create({container:{padding:16,backgroundColor:colors.background,flexGrow:1},title:{fontSize:24,fontWeight:'800',color:colors.navy},subtitle:{color:colors.textGray,marginTop:4,marginBottom:10},input:{backgroundColor:colors.white,borderWidth:1,borderColor:colors.border,borderRadius:10,padding:12,marginBottom:9,color:colors.navy},card:{backgroundColor:colors.white,borderColor:colors.border,borderWidth:1,borderRadius:12,padding:14,marginVertical:10},cardTitle:{fontWeight:'700',color:colors.navy,marginBottom:6},text:{color:'#334155',lineHeight:20}});
