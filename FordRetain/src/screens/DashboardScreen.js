@@ -1,12 +1,24 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import MetricCard from '../components/MetricCard';
 import PrimaryButton from '../components/PrimaryButton';
 import mockClients from '../data/mockClients';
 import colors from '../styles/colors';
 
+function IndicatorCard({ title, value, description, tone = 'neutral' }) {
+  const toneStyle = tone === 'danger' ? styles.danger : tone === 'warning' ? styles.warning : tone === 'success' ? styles.success : styles.neutral;
+  return (
+    <View style={[styles.metricCard, toneStyle]}>
+      <Text style={styles.metricTitle}>{title}</Text>
+      <Text style={styles.metricValue}>{value}</Text>
+      <Text style={styles.metricDescription}>{description}</Text>
+    </View>
+  );
+}
+
 export default function DashboardScreen({ navigation }) {
   const total = mockClients.length;
-  const emRisco = mockClients.filter((c) => c.riscoEvasao >= 70).length;
+  const alto = mockClients.filter((c) => c.riscoEvasao >= 70).length;
+  const medio = mockClients.filter((c) => c.riscoEvasao >= 50 && c.riscoEvasao < 70).length;
+  const baixo = mockClients.filter((c) => c.riscoEvasao < 50).length;
   const fieis = mockClients.filter((c) => c.perfil === 'Cliente Fiel').length;
   const garantiaVencida = mockClients.filter((c) => c.garantiaStatus === 'Vencida').length;
   const riscoMedio = mockClients.reduce((acc, c) => acc + c.riscoEvasao, 0) / total;
@@ -15,37 +27,40 @@ export default function DashboardScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Dashboard Executivo</Text>
-      <Text style={styles.subtitle}>Monitoramento preditivo de retenção e risco de evasão.</Text>
+      <Text style={styles.title}>Dashboard Executivo FordRetain</Text>
+      <Text style={styles.subtitle}>Monitoramento analítico da retenção preditiva, risco de evasão e potencial de recuperação.</Text>
 
-      <MetricCard title="Total de clientes analisados" value={String(total)} description="Base tratada para priorização comercial." />
-      <MetricCard title="Clientes em risco" value={String(emRisco)} description="Risco de evasão acima de 70%." />
-      <MetricCard title="VIN Share estimado" value={`${vinShareEstimado.toFixed(1)}%`} description="Estimativa acadêmica baseada no risco agregado." />
-      <MetricCard title="Clientes fiéis" value={String(fieis)} description="Alta recorrência na rede autorizada." />
-      <MetricCard title="Clientes com garantia vencida" value={String(garantiaVencida)} description="Público crítico para campanhas de retenção." />
-      <MetricCard title="Risco médio de evasão" value={`${riscoMedio.toFixed(1)}%`} description="Saúde geral da carteira de pós-venda." />
-      <MetricCard title="Alto potencial de recuperação" value={String(recuperacao)} description="Clientes com chance real de retorno por ação rápida." />
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Resumo executivo</Text>
-        <Text style={styles.text}>
-          O FordRetain permite agir antes da perda do cliente, elevando previsibilidade de receita, taxa de retorno à
-          oficina e continuidade do relacionamento com a marca Ford.
-        </Text>
+      <View style={styles.grid}>
+        <IndicatorCard title="Total de clientes analisados" value={String(total)} description="Base consolidada para inteligência comercial." />
+        <IndicatorCard title="Clientes em alto risco" value={String(alto)} description="Probabilidade de evasão acima de 70%." tone="danger" />
+        <IndicatorCard title="Clientes em risco médio" value={String(medio)} description="Necessitam estímulos de retenção no curto prazo." tone="warning" />
+        <IndicatorCard title="Clientes em baixo risco" value={String(baixo)} description="Relacionamento saudável e recorrente." tone="success" />
+        <IndicatorCard title="VIN Share estimado" value={`${vinShareEstimado.toFixed(1)}%`} description="Estimativa acadêmica com base no risco agregado." />
+        <IndicatorCard title="Risco médio de evasão" value={`${riscoMedio.toFixed(1)}%`} description="Indicador macro de saúde da carteira." tone="warning" />
+        <IndicatorCard title="Clientes com garantia vencida" value={String(garantiaVencida)} description="Segmento com maior sensibilidade a perda de vínculo." tone="danger" />
+        <IndicatorCard title="Clientes fiéis" value={String(fieis)} description="Público estratégico para programas de fidelidade." tone="success" />
+        <IndicatorCard title="Alto potencial de recuperação" value={String(recuperacao)} description="Clientes com resposta provável a ações preventivas." tone="warning" />
+        <IndicatorCard title="Campanhas recomendadas" value="3" description="Portfólio prioritário ativo no módulo de recomendações." />
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Próximos passos recomendados</Text>
-        <Text style={styles.text}>• Priorizar contato com risco alto nas próximas 24h.</Text>
-        <Text style={styles.text}>• Rodar campanha por perfil comportamental.</Text>
-        <Text style={styles.text}>• Medir impacto em agendamentos e VIN Share mensal.</Text>
+      <View style={styles.sectionCard}>
+        <Text style={styles.sectionTitle}>Resumo executivo</Text>
+        <Text style={styles.text}>A base analisada indica concentração de clientes com garantia vencida e risco elevado de evasão. A prioridade comercial deve ser o contato preventivo e campanhas de revisão para preservar recorrência de serviços e ampliar o VIN Share projetado.</Text>
       </View>
 
-      <PrimaryButton title="Clientes" onPress={() => navigation.navigate('Clients')} />
-      <PrimaryButton title="Recomendações" onPress={() => navigation.navigate('Recommendations')} />
-      <PrimaryButton title="Classificação" onPress={() => navigation.navigate('Prediction')} />
-      <PrimaryButton title="Clustering" onPress={() => navigation.navigate('Profiles')} />
-      <PrimaryButton title="Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
+      <View style={styles.sectionCard}>
+        <Text style={styles.sectionTitle}>Próximas ações</Text>
+        <Text style={styles.text}>• Priorizar clientes com risco acima de 70% em até 24 horas.</Text>
+        <Text style={styles.text}>• Executar campanha de contato preventivo por telefone e CRM.</Text>
+        <Text style={styles.text}>• Acompanhar clientes com garantia vencida com oferta segmentada.</Text>
+        <Text style={styles.text}>• Revisar semanalmente a evolução do VIN Share e taxa de retorno.</Text>
+      </View>
+
+      <PrimaryButton title="Ver clientes em risco" onPress={() => navigation.navigate('Clients')} />
+      <PrimaryButton title="Ver recomendações" onPress={() => navigation.navigate('Recommendations')} />
+      <PrimaryButton title="Simular classificação" onPress={() => navigation.navigate('Prediction')} />
+      <PrimaryButton title="Ver perfis de clustering" onPress={() => navigation.navigate('Profiles')} />
+      <PrimaryButton title="Voltar para Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
     </ScrollView>
   );
 }
@@ -53,8 +68,17 @@ export default function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
   title: { fontSize: 28, fontWeight: '800', color: colors.navy },
-  subtitle: { color: colors.textGray, marginBottom: 10 },
-  card: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12, marginTop: 8 },
-  cardTitle: { fontWeight: '800', color: colors.fordBlue, marginBottom: 4 },
-  text: { color: '#334155', lineHeight: 20 },
+  subtitle: { color: colors.textGray, marginBottom: 12 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  metricCard: { width: '48.5%', borderRadius: 14, borderWidth: 1, padding: 12, marginBottom: 10, backgroundColor: colors.white },
+  metricTitle: { fontWeight: '700', color: '#334155', fontSize: 12 },
+  metricValue: { color: colors.navy, fontWeight: '800', fontSize: 24, marginVertical: 6 },
+  metricDescription: { color: '#64748B', fontSize: 12 },
+  neutral: { borderColor: colors.border },
+  danger: { borderColor: '#FCA5A5', backgroundColor: '#FEF2F2' },
+  warning: { borderColor: '#FCD34D', backgroundColor: '#FFFBEB' },
+  success: { borderColor: '#86EFAC', backgroundColor: '#F0FDF4' },
+  sectionCard: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12, marginTop: 8, marginBottom: 4 },
+  sectionTitle: { fontWeight: '800', color: colors.fordBlue, marginBottom: 6 },
+  text: { color: '#334155', lineHeight: 21 },
 });
