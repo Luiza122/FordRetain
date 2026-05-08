@@ -44,11 +44,18 @@ export default function RegisterScreen({ navigation }) {
     }
 
     registerMockUser({ name, email: normalizedEmail, password, profile });
-    showMessage('success', 'Cadastro concluído com sucesso. Você será redirecionado para o login.');
+    showMessage('success', 'Cadastro concluído com sucesso.');
 
-    navigation.navigate('Login', {
-      registeredEmail: normalizedEmail,
-      registeredPassword: password,
+    navigation.navigate('AuthStatus', {
+      type: 'success',
+      title: 'Cadastro criado com sucesso',
+      message: 'Seu usuário foi criado no FordRetain. Agora faça login para acessar a plataforma.',
+      buttonLabel: 'Ir para Login',
+      nextRoute: 'Login',
+      params: {
+        registeredEmail: normalizedEmail,
+        registeredPassword: password,
+      },
     });
   }
 

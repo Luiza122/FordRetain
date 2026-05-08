@@ -9,6 +9,7 @@ import RecommendationScreen from '../screens/RecommendationsScreen';
 import PredictionScreen from '../screens/PredictionScreen';
 import ProfilesScreen from '../screens/ProfilesScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import AuthStatusScreen from '../screens/AuthStatusScreen';
 import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Recommendations" component={RecommendationScreen} options={{ title: 'Recomendações' }} />
         <Stack.Screen name="Prediction" component={PredictionScreen} options={{ title: 'Classificação' }} />
         <Stack.Screen name="Profiles" component={ProfilesScreen} options={{ title: 'Clustering' }} />
+        <Stack.Screen name="AuthStatus" component={AuthStatusScreen} options={{ title: 'Status de autenticação' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

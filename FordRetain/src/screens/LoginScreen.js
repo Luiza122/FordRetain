@@ -30,6 +30,13 @@ export default function LoginScreen({ navigation, route }) {
     const credentials = getMockCredentials();
     if (normalizedEmail !== credentials.email || password !== credentials.password) {
       showMessage('error', 'Credenciais inválidas. Use o login de teste ou o usuário cadastrado.');
+      navigation.navigate('AuthStatus', {
+        type: 'error',
+        title: 'Login não autorizado',
+        message: 'E-mail ou senha incorretos. Verifique os dados e tente novamente.',
+        buttonLabel: 'Tentar novamente',
+        nextRoute: 'Login',
+      });
       return;
     }
 
