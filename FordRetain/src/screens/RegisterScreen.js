@@ -21,7 +21,7 @@ export default function RegisterScreen({ navigation }) {
       return;
     }
 
-    if (!normalizedEmail.includes('@')) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       Alert.alert('Erro', 'Digite um e-mail válido.');
       return;
     }
@@ -38,11 +38,11 @@ export default function RegisterScreen({ navigation }) {
 
     registerMockUser({ name, email: normalizedEmail, password, profile });
 
-    Alert.alert(
-      'Cadastro realizado com sucesso',
-      'Agora você pode acessar o FordRetain com seu e-mail e senha.',
-      [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-    );
+    Alert.alert('Cadastro realizado com sucesso', 'Você já pode entrar com o usuário recém-criado.');
+    navigation.navigate('Login', {
+      registeredEmail: normalizedEmail,
+      registeredPassword: password,
+    });
   }
 
   return (
