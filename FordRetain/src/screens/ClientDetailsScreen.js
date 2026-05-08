@@ -1,9 +1,12 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import ProfileBadge from '../components/ProfileBadge';
 import colors from '../styles/colors';
+import FeedbackModal from '../components/FeedbackModal';
+import { useState } from 'react';
 
 export default function ClientDetailsScreen({ route, navigation }) {
+  const [feedback, setFeedback] = useState({ visible: false, title: '', message: '' });
   const client = route.params?.client;
 
   if (!client) {
@@ -35,9 +38,11 @@ export default function ClientDetailsScreen({ route, navigation }) {
         <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {client.acaoRecomendada}</Text>
       </View>
 
-      <PrimaryButton title="Aplicar recomendação" onPress={() => Alert.alert('Simulação', `Ação aplicada para ${client.nome}.`)} />
-      <PrimaryButton title="Registrar contato" onPress={() => Alert.alert('Simulação', 'Contato de pós-venda registrado com sucesso.')} />
+      <PrimaryButton title="Aplicar recomendação" onPress={() => setFeedback({ visible: true, title: 'Recomendação aplicada', message: `A ação de retenção para ${client.nome} foi aplicada e registrada.` })} />
+      <PrimaryButton title="Registrar contato" onPress={() => setFeedback({ visible: true, title: 'Contato registrado', message: 'Contato de pós-venda registrado com sucesso no histórico do cliente.' })} />
       <PrimaryButton title="Voltar para clientes" variant="secondary" onPress={() => navigation.navigate('Clients')} />
+
+      <FeedbackModal visible={feedback.visible} type="sucesso" title={feedback.title} message={feedback.message} buttonText="Continuar" onButtonPress={() => setFeedback((prev) => ({ ...prev, visible: false }))} />
     </ScrollView>
   );
 }
