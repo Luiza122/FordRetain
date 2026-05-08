@@ -6,27 +6,19 @@ import ClientCard from '../components/ClientCard';
 import colors from '../styles/colors';
 
 export default function RiskClientsScreen({ navigation }) {
-  const clients = useMemo(() => [...mockClients].sort((a, b) => b.probabilidadeEvasao - a.probabilidadeEvasao), []);
+  const clients = useMemo(() => [...mockClients].sort((a, b) => b.riscoEvasao - a.riscoEvasao), []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Clientes em Risco</Text>
-
+      <Text style={styles.title}>Clientes</Text>
       <FlatList
         data={clients}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <ClientCard
-            cliente={item}
-            onPress={(cliente) => navigation.navigate('ClientDetails', { client: cliente })}
-          />
-        )}
+        renderItem={({ item }) => <ClientCard cliente={item} onPress={(cliente) => navigation.navigate('ClientDetails', { client: cliente })} />}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={styles.listContent}
       />
-
-      <PrimaryButton title="Nova predição" onPress={() => navigation.navigate('Prediction')} />
-      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
+      <PrimaryButton title="Voltar ao dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </View>
   );
 }

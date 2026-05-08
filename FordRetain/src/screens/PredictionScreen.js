@@ -25,8 +25,8 @@ export default function PredictionScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Predição de Novo Cliente</Text>
-      <Text style={styles.subtitle}>Preencha os dados para simular o perfil de retenção.</Text>
+      <Text style={styles.title}>Classificação de Risco</Text>
+      <Text style={styles.subtitle}>Preencha os dados para simular o risco de evasão.</Text>
 
       <TextInput style={styles.input} placeholder="Idade" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
       <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />

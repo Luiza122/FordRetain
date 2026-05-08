@@ -1,49 +1,32 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import MetricCard from '../components/MetricCard';
 import PrimaryButton from '../components/PrimaryButton';
-import mockDashboard from '../data/mockDashboard';
+import mockClients from '../data/mockClients';
 import colors from '../styles/colors';
 
 export default function DashboardScreen({ navigation }) {
-  const {
-    vinShareGeral,
-    clientesMonitorados,
-    clientesAltoRisco,
-    agendamentosRecomendados,
-    vinSharePorRegiao,
-    vinSharePorModelo,
-    alertas,
-  } = mockDashboard;
+  const total = mockClients.length;
+  const emRisco = mockClients.filter((c) => c.riscoEvasao >= 70).length;
+  const fieis = mockClients.filter((c) => c.perfil === 'Cliente Fiel').length;
+  const garantiaVencida = mockClients.filter((c) => c.garantiaStatus === 'Vencida').length;
+  const vinShareEstimado = (100 - mockClients.reduce((acc, c) => acc + c.riscoEvasao, 0) / total).toFixed(1);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>FordRetain — Dashboard Executivo</Text>
+      <Text style={styles.title}>Dashboard FordRetain</Text>
+      <MetricCard title="Total de clientes analisados" value={String(total)} />
+      <MetricCard title="Clientes em risco" value={String(emRisco)} />
+      <MetricCard title="VIN Share estimado" value={`${vinShareEstimado}%`} />
+      <MetricCard title="Clientes fiéis" value={String(fieis)} />
+      <MetricCard title="Clientes com garantia vencida" value={String(garantiaVencida)} />
 
-      <MetricCard title="VIN Share geral" value={`${vinShareGeral}%`} description="Percentual de retenção na rede oficial Ford." />
-      <MetricCard title="Clientes monitorados" value={String(clientesMonitorados)} description="Carteira ativa acompanhada por sinais preditivos." />
-      <MetricCard title="Clientes em alto risco" value={String(clientesAltoRisco)} description="Prioridade para atuação imediata de retenção." />
-      <MetricCard title="Agendamentos recomendados" value={String(agendamentosRecomendados)} description="Ações de pós-venda sugeridas para recuperação." />
-
-      <Text style={styles.section}>VIN Share por região</Text>
-      {vinSharePorRegiao.map((item) => <MetricCard key={item.regiao} title={item.regiao} value={`${item.valor}%`} />)}
-
-      <Text style={styles.section}>VIN Share por modelo</Text>
-      {vinSharePorModelo.map((item) => <MetricCard key={item.modelo} title={item.modelo} value={`${item.valor}%`} />)}
-
-      <Text style={styles.section}>Alertas estratégicos</Text>
-      {alertas.map((alerta) => (
-        <View key={alerta} style={styles.alertCard}>
-          <Text style={styles.alertText}>{alerta}</Text>
-        </View>
-      ))}
-
-      <Text style={styles.section}>Menu FordRetain</Text>
+      <Text style={styles.section}>Navegação</Text>
       <View style={styles.actions}>
-        <PrimaryButton title="Clientes em risco" onPress={() => navigation.navigate('RiskClients')} />
-        <PrimaryButton title="Predição de cliente" onPress={() => navigation.navigate('Prediction')} />
-        <PrimaryButton title="Perfis de comportamento" onPress={() => navigation.navigate('Profiles')} />
-        <PrimaryButton title="Segurança e privacidade" onPress={() => navigation.navigate('Security')} />
-        <PrimaryButton title="Sobre o projeto" onPress={() => navigation.navigate('About')} />
+        <PrimaryButton title="Tela inicial" variant="secondary" onPress={() => navigation.navigate('Home')} />
+        <PrimaryButton title="Clientes" onPress={() => navigation.navigate('Clients')} />
+        <PrimaryButton title="Recomendações" onPress={() => navigation.navigate('Recommendations')} />
+        <PrimaryButton title="Classificação preditiva" onPress={() => navigation.navigate('Prediction')} />
+        <PrimaryButton title="Perfis de clustering" onPress={() => navigation.navigate('Profiles')} />
       </View>
     </ScrollView>
   );
@@ -52,8 +35,6 @@ export default function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
   title: { fontSize: 24, fontWeight: '700', color: colors.navy, marginBottom: 12 },
-  section: { marginTop: 10, marginBottom: 8, fontSize: 16, fontWeight: '700', color: '#0F172A' },
-  alertCard: { backgroundColor: '#FFF7ED', borderColor: '#FDBA74', borderWidth: 1, borderRadius: 10, padding: 10, marginBottom: 8 },
-  alertText: { color: '#9A3412', fontWeight: '600' },
-  actions: { marginVertical: 10, gap: 10, marginBottom: 24 },
+  section: { marginTop: 12, marginBottom: 8, fontSize: 16, fontWeight: '700', color: '#0F172A' },
+  actions: { gap: 10, marginBottom: 24 },
 });

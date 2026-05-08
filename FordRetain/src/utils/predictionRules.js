@@ -21,7 +21,7 @@ export function predictCustomerProfile(formData) {
 
   if (historicoMarca === 'Primeiro Ford' && Number(idade || 0) <= 35) {
     return {
-      perfil: 'Cliente de Abandono',
+      perfil: 'Cliente em Risco',
       probabilidade: 82,
       acaoRecomendada: 'Executar onboarding pós-venda com contato consultivo e benefício de primeira revisão.',
       explicacao: 'Primeiro contato com a marca e baixo histórico elevam o risco de evasão no ciclo inicial.',
