@@ -7,7 +7,7 @@ const profiles = [
   { nome: 'Cliente Fiel', descricao: 'Alta recorrência em revisões e confiança no atendimento da concessionária.', risco: 'Baixo', estrategia: 'Programa de fidelidade, upgrades de serviço e relacionamento VIP.' },
   { nome: 'Cliente Econômico', descricao: 'Decide por preço e avalia custo-benefício antes de retornar.', risco: 'Médio', estrategia: 'Combos promocionais, parcelamento e comunicação de economia total.' },
   { nome: 'Cliente Esquecido', descricao: 'Perde prazos de revisão por rotina intensa e baixa lembrança da marca.', risco: 'Médio', estrategia: 'Lembretes preditivos multicanal e agendamento em poucos cliques.' },
-  { nome: 'Cliente de Abandono', descricao: 'Mostra sinais de evasão para oficinas independentes e queda de frequência.', risco: 'Alto', estrategia: 'Contato consultivo imediato com proposta de recuperação personalizada.' },
+  { nome: 'Cliente em Risco', descricao: 'Mostra sinais de evasão para oficinas independentes e queda de frequência.', risco: 'Alto', estrategia: 'Contato consultivo imediato com proposta de recuperação personalizada.' },
 ];
 
 export default function ProfilesScreen({ navigation }) {
