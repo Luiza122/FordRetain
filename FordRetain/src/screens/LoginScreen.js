@@ -4,9 +4,9 @@ import PrimaryButton from '../components/PrimaryButton';
 import { getMockCredentials } from '../data/mockAuth';
 import colors from '../styles/colors';
 
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function LoginScreen({ navigation, route }) {
+  const [email, setEmail] = useState(route?.params?.registeredEmail || '');
+  const [password, setPassword] = useState(route?.params?.registeredPassword || '');
 
   function handleLogin() {
     if (!email.trim() || !password.trim()) {
