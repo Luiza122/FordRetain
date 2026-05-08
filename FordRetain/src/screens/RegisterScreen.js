@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import colors from '../styles/colors';
 import { registerMockUser } from '../data/mockAuth';
@@ -12,37 +12,44 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profile, setProfile] = useState(PROFILES[0]);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('info');
+
+  function showMessage(type, text) {
+    setMessageType(type);
+    setMessage(text);
+  }
 
   function handleRegister() {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!name.trim() || !normalizedEmail || !password.trim() || !confirmPassword.trim() || !profile) {
-      Alert.alert('Atenção', 'Preencha todos os campos.');
+      showMessage('error', 'Preencha todos os campos.');
       return;
     }
 
-    if (!normalizedEmail.includes('@')) {
-      Alert.alert('Erro', 'Digite um e-mail válido.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      showMessage('error', 'Digite um e-mail válido.');
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres.');
+      showMessage('error', 'A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Erro', 'Senha e confirmar senha precisam ser iguais.');
+      showMessage('error', 'Senha e confirmar senha precisam ser iguais.');
       return;
     }
 
     registerMockUser({ name, email: normalizedEmail, password, profile });
+    showMessage('success', 'Cadastro concluído com sucesso. Você será redirecionado para o login.');
 
-    Alert.alert(
-      'Cadastro realizado com sucesso',
-      'Agora você pode acessar o FordRetain com seu e-mail e senha.',
-      [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-    );
+    navigation.navigate('Login', {
+      registeredEmail: normalizedEmail,
+      registeredPassword: password,
+    });
   }
 
   return (
@@ -78,6 +85,12 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setConfirmPassword}
         />
 
+        {message ? (
+          <View style={[styles.messageBox, messageType === 'error' ? styles.errorBox : styles.successBox]}>
+            <Text style={styles.messageText}>{message}</Text>
+          </View>
+        ) : null}
+
         <Text style={styles.label}>Perfil</Text>
         <View style={styles.profileRow}>
           {PROFILES.map((item) => (
@@ -103,6 +116,10 @@ const styles = StyleSheet.create({
   title: { fontSize: 28, fontWeight: '700', color: colors.navy, marginBottom: 6 },
   subtitle: { color: colors.textGray, marginBottom: 16 },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, marginBottom: 10, color: colors.navy },
+  messageBox: { borderRadius: 10, padding: 10, marginBottom: 8 },
+  errorBox: { backgroundColor: '#FEE2E2', borderWidth: 1, borderColor: '#FCA5A5' },
+  successBox: { backgroundColor: '#DCFCE7', borderWidth: 1, borderColor: '#86EFAC' },
+  messageText: { color: colors.navy, fontWeight: '600' },
   label: { color: colors.navy, fontWeight: '700', marginTop: 4, marginBottom: 2 },
   profileRow: { gap: 4, marginBottom: 4 },
 });

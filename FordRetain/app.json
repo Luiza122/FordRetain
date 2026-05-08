@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "fiap-auth-app",
-    "slug": "fiap-auth-app",
+    "name": "FordRetain",
+    "slug": "fordretain",
     "plugins": [
       [
         "expo-camera",
