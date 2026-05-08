@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Alert, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
-import { MOCK_CREDENTIALS } from '../data/mockAuth';
+import { getMockCredentials } from '../data/mockAuth';
 import colors from '../styles/colors';
 
 export default function LoginScreen({ navigation }) {
@@ -20,7 +20,8 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    if (normalizedEmail !== MOCK_CREDENTIALS.email || password !== MOCK_CREDENTIALS.password) {
+    const credentials = getMockCredentials();
+    if (normalizedEmail !== credentials.email || password !== credentials.password) {
       Alert.alert('Credenciais inválidas', 'Use o login de teste informado na tela.');
       return;
     }

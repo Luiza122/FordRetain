@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import colors from '../styles/colors';
+import { registerMockUser } from '../data/mockAuth';
 
 const PROFILES = ['Gerente', 'Atendente'];
 
@@ -34,6 +35,8 @@ export default function RegisterScreen({ navigation }) {
       Alert.alert('Erro', 'Senha e confirmar senha precisam ser iguais.');
       return;
     }
+
+    registerMockUser({ name, email: normalizedEmail, password, profile });
 
     Alert.alert(
       'Cadastro realizado com sucesso',
