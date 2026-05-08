@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    navigation.replace('Dashboard');
+    navigation.replace('Home');
   }
 
   return (
