@@ -1,11 +1,4 @@
-const DEFAULT_CREDENTIALS = {
-  email: 'gerente@fordretain.com',
-  password: '123456',
-  name: 'Gerente FordRetain',
-  profile: 'Gerente',
-};
-
-let activeCredentials = { ...DEFAULT_CREDENTIALS };
+let activeCredentials = null;
 
 export function getMockCredentials() {
   return activeCredentials;
@@ -21,5 +14,5 @@ export function registerMockUser({ name, email, password, profile }) {
 }
 
 export function resetMockCredentials() {
-  activeCredentials = { ...DEFAULT_CREDENTIALS };
+  activeCredentials = null;
 }
