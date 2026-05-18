@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
+import AppLogo from '../components/AppLogo';
 import { authenticateMockUser } from '../data/mockAuth';
 import colors from '../styles/colors';
 import FeedbackModal from '../components/FeedbackModal';
@@ -20,18 +21,18 @@ export default function LoginScreen({ navigation, route }) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return showError('Digite um e-mail válido para continuar.');
 
     const user = authenticateMockUser(normalizedEmail, password);
-    if (!user) {
-      return showError('Verifique o e-mail e a senha cadastrados.');
-    }
+    if (!user) return showError('Verifique o e-mail e a senha cadastrados.');
 
     navigation.replace('Home');
   }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <View style={styles.topGlow} />
       <View style={styles.card}>
+        <AppLogo />
         <Text style={styles.title}>FordRetain</Text>
-        <Text style={styles.subtitle}>Plataforma de retenção preditiva para veículos Ford</Text>
+        <Text style={styles.subtitle}>Inteligência mobile para retenção, pós-venda e aumento do VIN Share.</Text>
 
         <TextInput style={styles.input} placeholder="E-mail" placeholderTextColor="#94A3B8" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
         <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#94A3B8" secureTextEntry value={password} onChangeText={setPassword} />
@@ -54,10 +55,11 @@ export default function LoginScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.navy, justifyContent: 'center', padding: 16 },
-  card: { backgroundColor: colors.white, borderRadius: 20, padding: 20, borderWidth: 1, borderColor: colors.border },
-  title: { fontSize: 32, fontWeight: '800', color: colors.navy, marginBottom: 6 },
-  subtitle: { color: colors.textGray, marginBottom: 16, lineHeight: 20 },
-  input: { borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 13, marginBottom: 10, color: colors.navy, backgroundColor: colors.surfaceSoft },
-  registerPrompt: { color: colors.textGray, marginTop: 8, marginBottom: 2, textAlign: 'center', fontWeight: '700' },
+  container: { flex: 1, backgroundColor: colors.navy, justifyContent: 'center', padding: 18 },
+  topGlow: { position: 'absolute', top: -90, right: -80, width: 220, height: 220, borderRadius: 110, backgroundColor: 'rgba(47,128,237,0.28)' },
+  card: { backgroundColor: colors.white, borderRadius: 28, padding: 22, borderWidth: 1, borderColor: 'rgba(255,255,255,0.45)', shadowColor: colors.shadow, shadowOpacity: 0.22, shadowRadius: 24, shadowOffset: { width: 0, height: 12 }, elevation: 7 },
+  title: { fontSize: 32, fontWeight: '900', color: colors.navy, marginTop: 16, marginBottom: 6, textAlign: 'center' },
+  subtitle: { color: colors.textGray, marginBottom: 18, lineHeight: 21, textAlign: 'center', fontWeight: '600' },
+  input: { borderWidth: 1, borderColor: colors.border, borderRadius: 16, padding: 14, marginBottom: 10, color: colors.navy, backgroundColor: colors.surfaceSoft },
+  registerPrompt: { color: colors.textGray, marginTop: 10, marginBottom: 2, textAlign: 'center', fontWeight: '800' },
 });
