@@ -34,7 +34,6 @@ export default function HomeScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
           <AppLogo small />
-          <Text style={styles.title}>FordRetain</Text>
           <Text style={styles.subtitle}>Plataforma preditiva para retenção no pós-venda Ford.</Text>
         </View>
 
@@ -67,7 +66,7 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Como o FordRetain resolve</Text>
+          <Text style={styles.cardTitle}>Como a solução resolve</Text>
           {STEPS.map((step) => (
             <View key={step.title} style={styles.stepItem}>
               <Text style={styles.stepTitle}>{step.title}</Text>
@@ -99,8 +98,7 @@ const cardShadow = {
 const styles = StyleSheet.create({
   container: { flexGrow: 1, padding: 16, backgroundColor: colors.background, gap: 12, paddingBottom: 26 },
   hero: { backgroundColor: colors.navy, borderRadius: 28, padding: 20, alignItems: 'center', ...cardShadow },
-  title: { fontSize: 32, fontWeight: '900', color: colors.white, marginTop: 10 },
-  subtitle: { color: '#DBEAFE', marginTop: 4, textAlign: 'center', fontWeight: '600' },
+  subtitle: { color: '#DBEAFE', marginTop: 14, textAlign: 'center', fontWeight: '700', lineHeight: 20 },
   card: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.borderSoft, borderRadius: 22, padding: 16, gap: 8, ...cardShadow },
   profileCard: { backgroundColor: colors.lightBlue, borderWidth: 1, borderColor: '#BFDBFE', borderRadius: 22, padding: 16, gap: 6, ...cardShadow },
   profileTitle: { fontWeight: '900', color: colors.navy, fontSize: 18 },
