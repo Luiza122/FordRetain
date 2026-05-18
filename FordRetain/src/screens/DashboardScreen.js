@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
-import mockClients from '../data/mockClients';
 import colors from '../styles/colors';
+import { getDashboard, getApiHealth } from '../services/api';
 
 function IndicatorCard({ title, value, description, tone = 'neutral' }) {
   const toneStyle = tone === 'danger' ? styles.danger : tone === 'warning' ? styles.warning : tone === 'success' ? styles.success : styles.neutral;
@@ -14,34 +15,78 @@ function IndicatorCard({ title, value, description, tone = 'neutral' }) {
   );
 }
 
+function SimpleBarChart({ title, data, suffix = '' }) {
+  const maxValue = Math.max(...data.map((item) => item.value), 1);
+
+  return (
+    <View style={styles.sectionCard}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      {data.map((item) => (
+        <View key={item.label} style={styles.chartRow}>
+          <Text style={styles.chartLabel}>{item.label}</Text>
+          <View style={styles.chartTrack}>
+            <View style={[styles.chartFill, { width: `${Math.max(8, (item.value / maxValue) * 100)}%` }]} />
+          </View>
+          <Text style={styles.chartValue}>{item.value}{suffix}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export default function DashboardScreen({ navigation }) {
-  const total = mockClients.length;
-  const alto = mockClients.filter((c) => c.riscoEvasao >= 70).length;
-  const medio = mockClients.filter((c) => c.riscoEvasao >= 50 && c.riscoEvasao < 70).length;
-  const baixo = mockClients.filter((c) => c.riscoEvasao < 50).length;
-  const fieis = mockClients.filter((c) => c.perfil === 'Cliente Fiel').length;
-  const garantiaVencida = mockClients.filter((c) => c.garantiaStatus === 'Vencida').length;
-  const riscoMedio = mockClients.reduce((acc, c) => acc + c.riscoEvasao, 0) / total;
-  const vinShareEstimado = 100 - riscoMedio * 0.65;
-  const recuperacao = mockClients.filter((c) => c.riscoEvasao >= 60 && c.riscoEvasao < 85).length;
+  const [dashboard, setDashboard] = useState(null);
+  const [apiInfo, setApiInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        const [dashboardData, healthData] = await Promise.all([getDashboard(), getApiHealth()]);
+        setDashboard(dashboardData);
+        setApiInfo(healthData);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.fordBlue} />
+        <Text style={styles.loadingText}>Carregando dados da API FordRetain...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Dashboard Executivo FordRetain</Text>
       <Text style={styles.subtitle}>Monitoramento analítico da retenção preditiva, risco de evasão e potencial de recuperação.</Text>
 
-      <View style={styles.grid}>
-        <IndicatorCard title="Total de clientes analisados" value={String(total)} description="Base consolidada para inteligência comercial." />
-        <IndicatorCard title="Clientes em alto risco" value={String(alto)} description="Probabilidade de evasão acima de 70%." tone="danger" />
-        <IndicatorCard title="Clientes em risco médio" value={String(medio)} description="Necessitam estímulos de retenção no curto prazo." tone="warning" />
-        <IndicatorCard title="Clientes em baixo risco" value={String(baixo)} description="Relacionamento saudável e recorrente." tone="success" />
-        <IndicatorCard title="VIN Share estimado" value={`${vinShareEstimado.toFixed(1)}%`} description="Estimativa acadêmica com base no risco agregado." />
-        <IndicatorCard title="Risco médio de evasão" value={`${riscoMedio.toFixed(1)}%`} description="Indicador macro de saúde da carteira." tone="warning" />
-        <IndicatorCard title="Clientes com garantia vencida" value={String(garantiaVencida)} description="Segmento com maior sensibilidade a perda de vínculo." tone="danger" />
-        <IndicatorCard title="Clientes fiéis" value={String(fieis)} description="Público estratégico para programas de fidelidade." tone="success" />
-        <IndicatorCard title="Alto potencial de recuperação" value={String(recuperacao)} description="Clientes com resposta provável a ações preventivas." tone="warning" />
-        <IndicatorCard title="Campanhas recomendadas" value="3" description="Portfólio prioritário ativo no módulo de recomendações." />
+      <View style={styles.apiBox}>
+        <Text style={styles.apiTitle}>Integração assíncrona</Text>
+        <Text style={styles.apiText}>{apiInfo.message}</Text>
+        <Text style={styles.apiText}>Endpoints simulados: {apiInfo.endpoints.join(' • ')}</Text>
       </View>
+
+      <View style={styles.grid}>
+        <IndicatorCard title="Total de clientes analisados" value={String(dashboard.total)} description="Base consolidada para inteligência comercial." />
+        <IndicatorCard title="Clientes em alto risco" value={String(dashboard.highRisk)} description="Probabilidade de evasão acima de 75%." tone="danger" />
+        <IndicatorCard title="Clientes em risco médio" value={String(dashboard.mediumRisk)} description="Necessitam estímulos de retenção no curto prazo." tone="warning" />
+        <IndicatorCard title="Clientes em baixo risco" value={String(dashboard.lowRisk)} description="Relacionamento saudável e recorrente." tone="success" />
+        <IndicatorCard title="VIN Share estimado" value={`${dashboard.vinShareEstimado}%`} description="Estimativa acadêmica com base no risco agregado." />
+        <IndicatorCard title="Risco médio de evasão" value={`${dashboard.riscoMedio}%`} description="Indicador macro de saúde da carteira." tone="warning" />
+        <IndicatorCard title="Clientes com garantia vencida" value={String(dashboard.garantiaVencida)} description="Segmento sensível à perda de vínculo." tone="danger" />
+        <IndicatorCard title="Campanhas recomendadas" value={String(dashboard.campanhasRecomendadas)} description="Ações ativas no módulo de recomendações." />
+      </View>
+
+      <SimpleBarChart title="VIN Share estimado por região" data={dashboard.vinSharePorRegiao} suffix="%" />
+      <SimpleBarChart title="Clientes por nível de risco" data={dashboard.riscoPorNivel} />
+      <SimpleBarChart title="Distribuição por perfil de clustering" data={dashboard.clientesPorPerfil} />
 
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Resumo executivo</Text>
@@ -50,7 +95,7 @@ export default function DashboardScreen({ navigation }) {
 
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Próximas ações</Text>
-        <Text style={styles.text}>• Priorizar clientes com risco acima de 70% em até 24 horas.</Text>
+        <Text style={styles.text}>• Priorizar clientes com risco acima de 75% em até 24 horas.</Text>
         <Text style={styles.text}>• Executar campanha de contato preventivo por telefone e CRM.</Text>
         <Text style={styles.text}>• Acompanhar clientes com garantia vencida com oferta segmentada.</Text>
         <Text style={styles.text}>• Revisar semanalmente a evolução do VIN Share e taxa de retorno.</Text>
@@ -67,8 +112,13 @@ export default function DashboardScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: colors.background, flexGrow: 1 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background, padding: 18 },
+  loadingText: { marginTop: 10, color: colors.textGray, fontWeight: '600', textAlign: 'center' },
   title: { fontSize: 28, fontWeight: '800', color: colors.navy },
   subtitle: { color: colors.textGray, marginBottom: 12 },
+  apiBox: { backgroundColor: colors.lightBlue, borderColor: '#BFDBFE', borderWidth: 1, borderRadius: 14, padding: 12, marginBottom: 12 },
+  apiTitle: { color: colors.navy, fontWeight: '800', marginBottom: 4 },
+  apiText: { color: '#334155', lineHeight: 20 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
   metricCard: { width: '48.5%', borderRadius: 14, borderWidth: 1, padding: 12, marginBottom: 10, backgroundColor: colors.white },
   metricTitle: { fontWeight: '700', color: '#334155', fontSize: 12 },
@@ -79,6 +129,11 @@ const styles = StyleSheet.create({
   warning: { borderColor: '#FCD34D', backgroundColor: '#FFFBEB' },
   success: { borderColor: '#86EFAC', backgroundColor: '#F0FDF4' },
   sectionCard: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 12, marginTop: 8, marginBottom: 4 },
-  sectionTitle: { fontWeight: '800', color: colors.fordBlue, marginBottom: 6 },
+  sectionTitle: { fontWeight: '800', color: colors.fordBlue, marginBottom: 8 },
   text: { color: '#334155', lineHeight: 21 },
+  chartRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 9 },
+  chartLabel: { width: 96, color: colors.navy, fontWeight: '700', fontSize: 12 },
+  chartTrack: { flex: 1, height: 12, backgroundColor: '#E2E8F0', borderRadius: 999, overflow: 'hidden' },
+  chartFill: { height: 12, backgroundColor: colors.fordBlue, borderRadius: 999 },
+  chartValue: { width: 44, textAlign: 'right', color: '#334155', fontWeight: '700', fontSize: 12 },
 });
