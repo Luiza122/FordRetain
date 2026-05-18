@@ -20,6 +20,10 @@ export default function LoginScreen({ navigation, route }) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return showError('Digite um e-mail válido para continuar.');
 
     const credentials = getMockCredentials();
+    if (!credentials) {
+      return showError('Nenhuma conta cadastrada. Crie uma conta para acessar o FordRetain.');
+    }
+
     if (normalizedEmail !== credentials.email || password !== credentials.password) {
       return showError('Verifique o e-mail e a senha informados.');
     }
@@ -39,12 +43,6 @@ export default function LoginScreen({ navigation, route }) {
         <PrimaryButton title="Entrar" onPress={handleLogin} />
         <Text style={styles.registerPrompt}>Ainda não tem conta?</Text>
         <PrimaryButton title="Criar conta" variant="secondary" onPress={() => navigation.navigate('Cadastro')} />
-
-        <View style={styles.demoBox}>
-          <Text style={styles.demoTitle}>Login de teste</Text>
-          <Text style={styles.demoText}>E-mail: gerente@fordretain.com</Text>
-          <Text style={styles.demoText}>Senha: 123456</Text>
-        </View>
       </View>
 
       <FeedbackModal
@@ -66,7 +64,4 @@ const styles = StyleSheet.create({
   subtitle: { color: colors.textGray, marginBottom: 16 },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, marginBottom: 10, color: colors.navy },
   registerPrompt: { color: colors.textGray, marginTop: 6, marginBottom: 2, textAlign: 'center', fontWeight: '600' },
-  demoBox: { marginTop: 14, backgroundColor: colors.lightBlue, borderRadius: 10, padding: 12 },
-  demoTitle: { color: colors.navy, fontWeight: '700', marginBottom: 4 },
-  demoText: { color: colors.textGray },
 });
