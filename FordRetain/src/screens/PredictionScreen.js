@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
+import RoleGuard from '../components/RoleGuard';
 import colors from '../styles/colors';
 import { predictClientProfile } from '../services/api';
 
@@ -31,45 +32,51 @@ export default function PredictionScreen({ navigation }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Classificação Preditiva</Text>
-      <Text style={styles.subtitle}>Simulação do endpoint POST /predict usando somente dados disponíveis no momento da compra.</Text>
+    <RoleGuard
+      navigation={navigation}
+      allowedProfiles={['Gerente']}
+      message="A classificação preditiva é exclusiva para o perfil Gerente, pois simula a previsão estratégica de novos clientes."
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Classificação Preditiva</Text>
+        <Text style={styles.subtitle}>Simulação do endpoint POST /predict usando somente dados disponíveis no momento da compra.</Text>
 
-      <View style={styles.warningBox}>
-        <Text style={styles.warningTitle}>Regra anti data leakage</Text>
-        <Text style={styles.warningText}>Esta tela não usa revisões feitas, gastos, garantia vencida, última revisão ou frequência de visitas. A previsão considera apenas dados conhecidos na venda.</Text>
-      </View>
-
-      <TextInput style={styles.input} placeholder="Idade do cliente" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />
-      <TextInput style={styles.input} placeholder="Modelo do veículo" value={form.modelo} onChangeText={(v) => update('modelo', v)} />
-      <TextInput style={styles.input} placeholder="Forma de pagamento" value={form.formaPagamento} onChangeText={(v) => update('formaPagamento', v)} />
-      <TextInput style={styles.input} placeholder="Canal de compra" value={form.canalCompra} onChangeText={(v) => update('canalCompra', v)} />
-      <TextInput style={styles.input} placeholder="Histórico com a marca" value={form.historicoMarca} onChangeText={(v) => update('historicoMarca', v)} />
-
-      {loading ? (
-        <View style={styles.loadingBox}>
-          <ActivityIndicator color={colors.fordBlue} />
-          <Text style={styles.loadingText}>Enviando dados para a API simulada...</Text>
+        <View style={styles.warningBox}>
+          <Text style={styles.warningTitle}>Regra anti data leakage</Text>
+          <Text style={styles.warningText}>Esta tela não usa revisões feitas, gastos, garantia vencida, última revisão ou frequência de visitas. A previsão considera apenas dados conhecidos na venda.</Text>
         </View>
-      ) : (
-        <PrimaryButton title="Prever Perfil" onPress={handlePredict} />
-      )}
 
-      {result && (
-        <View style={styles.resultCard}>
-          <Text style={styles.resultTitle}>Resultado da classificação</Text>
-          <Text style={styles.row}><Text style={styles.label}>Perfil previsto:</Text> {result.perfil}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Probabilidade:</Text> {result.probabilidade}%</Text>
-          <Text style={styles.row}><Text style={styles.label}>Nível de risco:</Text> {result.risco}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {result.acaoRecomendada}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Variáveis usadas:</Text> {result.variaveisUtilizadas.join(', ')}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Explicação:</Text> {result.explicacao}</Text>
-        </View>
-      )}
+        <TextInput style={styles.input} placeholder="Idade do cliente" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
+        <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />
+        <TextInput style={styles.input} placeholder="Modelo do veículo" value={form.modelo} onChangeText={(v) => update('modelo', v)} />
+        <TextInput style={styles.input} placeholder="Forma de pagamento" value={form.formaPagamento} onChangeText={(v) => update('formaPagamento', v)} />
+        <TextInput style={styles.input} placeholder="Canal de compra" value={form.canalCompra} onChangeText={(v) => update('canalCompra', v)} />
+        <TextInput style={styles.input} placeholder="Histórico com a marca" value={form.historicoMarca} onChangeText={(v) => update('historicoMarca', v)} />
 
-      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
-    </ScrollView>
+        {loading ? (
+          <View style={styles.loadingBox}>
+            <ActivityIndicator color={colors.fordBlue} />
+            <Text style={styles.loadingText}>Enviando dados para a API simulada...</Text>
+          </View>
+        ) : (
+          <PrimaryButton title="Prever Perfil" onPress={handlePredict} />
+        )}
+
+        {result && (
+          <View style={styles.resultCard}>
+            <Text style={styles.resultTitle}>Resultado da classificação</Text>
+            <Text style={styles.row}><Text style={styles.label}>Perfil previsto:</Text> {result.perfil}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Probabilidade:</Text> {result.probabilidade}%</Text>
+            <Text style={styles.row}><Text style={styles.label}>Nível de risco:</Text> {result.risco}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {result.acaoRecomendada}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Variáveis usadas:</Text> {result.variaveisUtilizadas.join(', ')}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Explicação:</Text> {result.explicacao}</Text>
+          </View>
+        )}
+
+        <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
+      </ScrollView>
+    </RoleGuard>
   );
 }
 
