@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import ProfileBadge from '../components/ProfileBadge';
+import RoleGuard from '../components/RoleGuard';
 import colors from '../styles/colors';
 import PrimaryButton from '../components/PrimaryButton';
 
@@ -40,28 +41,34 @@ const profiles = [
 
 export default function ProfilesScreen({ navigation }) {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Clustering de Perfis</Text>
-      <Text style={styles.subtitle}>Segmentação comportamental obtida na Base 1 para orientar a classificação e as campanhas de retenção.</Text>
+    <RoleGuard
+      navigation={navigation}
+      allowedProfiles={['Gerente']}
+      message="A tela de clustering é exclusiva para o perfil Gerente, pois explica a segmentação estratégica usada no modelo."
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Clustering de Perfis</Text>
+        <Text style={styles.subtitle}>Segmentação comportamental obtida na Base 1 para orientar a classificação e as campanhas de retenção.</Text>
 
-      {profiles.map((profile) => (
-        <View key={profile.nome} style={styles.card}>
-          <ProfileBadge perfil={profile.nome} />
-          <Text style={styles.row}><Text style={styles.label}>Descrição:</Text> {profile.descricao}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Comportamento:</Text> {profile.comportamento}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Risco:</Text> {profile.risco}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Estratégia de retenção:</Text> {profile.estrategia}</Text>
-          <Text style={styles.row}><Text style={styles.label}>Exemplo:</Text> {profile.exemplo}</Text>
+        {profiles.map((profile) => (
+          <View key={profile.nome} style={styles.card}>
+            <ProfileBadge perfil={profile.nome} />
+            <Text style={styles.row}><Text style={styles.label}>Descrição:</Text> {profile.descricao}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Comportamento:</Text> {profile.comportamento}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Risco:</Text> {profile.risco}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Estratégia de retenção:</Text> {profile.estrategia}</Text>
+            <Text style={styles.row}><Text style={styles.label}>Exemplo:</Text> {profile.exemplo}</Text>
+          </View>
+        ))}
+
+        <View style={styles.explanationCard}>
+          <Text style={styles.sectionTitle}>Como isso entra no modelo</Text>
+          <Text style={styles.row}>Na etapa acadêmica, os perfis descobertos pelo clustering viram a variável-alvo da classificação. Depois, o app simula a previsão de novos clientes usando apenas dados da compra, sem usar dados pós-venda.</Text>
         </View>
-      ))}
 
-      <View style={styles.explanationCard}>
-        <Text style={styles.sectionTitle}>Como isso entra no modelo</Text>
-        <Text style={styles.row}>Na etapa acadêmica, os perfis descobertos pelo clustering viram a variável-alvo da classificação. Depois, o app simula a previsão de novos clientes usando apenas dados da compra, sem usar dados pós-venda.</Text>
-      </View>
-
-      <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
-    </ScrollView>
+        <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
+      </ScrollView>
+    </RoleGuard>
   );
 }
 
