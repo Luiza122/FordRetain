@@ -1,12 +1,3 @@
-const DEFAULT_USERS = [
-  {
-    email: 'gerente@fordretain.com',
-    password: '123456',
-    name: 'Gerente FordRetain',
-    profile: 'Gerente',
-  },
-];
-
 const STORAGE_KEYS = {
   users: 'fordretain:mock-users',
   session: 'fordretain:active-session',
@@ -33,13 +24,11 @@ function readStorage(key, fallback) {
 
 function writeStorage(key, value) {
   if (!hasWebStorage()) return;
-
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
 function removeStorage(key) {
   if (!hasWebStorage()) return;
-
   window.localStorage.removeItem(key);
 }
 
@@ -49,7 +38,6 @@ function normalizeEmail(email) {
 
 function sanitizeUser(user) {
   if (!user) return null;
-
   return {
     name: user.name,
     email: user.email,
@@ -57,18 +45,7 @@ function sanitizeUser(user) {
   };
 }
 
-function mergeWithDefaultUsers(users) {
-  const storedUsers = Array.isArray(users) ? users : [];
-
-  return [
-    ...DEFAULT_USERS,
-    ...storedUsers.filter(
-      (user) => !DEFAULT_USERS.some((defaultUser) => defaultUser.email === normalizeEmail(user.email)),
-    ),
-  ];
-}
-
-let registeredUsers = mergeWithDefaultUsers(readStorage(STORAGE_KEYS.users, []));
+let registeredUsers = readStorage(STORAGE_KEYS.users, []);
 let activeUser = readStorage(STORAGE_KEYS.session, null);
 
 function persistUsers() {
