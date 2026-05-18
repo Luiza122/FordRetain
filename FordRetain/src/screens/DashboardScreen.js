@@ -96,7 +96,6 @@ export default function DashboardScreen({ navigation }) {
             <View style={styles.heroTop}>
               <View style={styles.heroTextBlock}>
                 <Text style={styles.eyebrow}>Painel executivo</Text>
-                <Text style={styles.title}>FordRetain</Text>
                 <Text style={styles.subtitle}>Retenção preditiva e inteligência de VIN Share.</Text>
               </View>
               <View style={styles.statusPill}>
@@ -174,8 +173,7 @@ const styles = StyleSheet.create({
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
   heroTextBlock: { flex: 1 },
   eyebrow: { color: '#9CC5FF', fontWeight: '800', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.2 },
-  title: { fontSize: 34, fontWeight: '900', color: colors.white, marginTop: 4 },
-  subtitle: { color: '#DCEBFF', marginTop: 4, lineHeight: 20 },
+  subtitle: { color: '#DCEBFF', marginTop: 6, lineHeight: 20, fontWeight: '700' },
   statusPill: { backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.22)', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 5 },
   statusDot: { color: '#22C55E', fontSize: 10 },
   statusText: { color: colors.white, fontWeight: '800', fontSize: 12 },
