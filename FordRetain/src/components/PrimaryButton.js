@@ -20,29 +20,35 @@ export default function PrimaryButton({ title, onPress, variant = 'primary' }) {
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 14,
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 6,
     borderWidth: 1,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 3,
   },
   primaryButton: {
     backgroundColor: colors.fordBlue,
     borderColor: colors.fordBlue,
   },
   secondaryButton: {
-    backgroundColor: colors.lightBlue,
-    borderColor: colors.fordBlue,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
   },
   pressed: {
-    opacity: 0.9,
-    transform: [{ scale: 0.99 }],
+    opacity: 0.92,
+    transform: [{ scale: 0.985 }],
   },
   text: {
-    fontWeight: '700',
+    fontWeight: '800',
     fontSize: 15,
+    letterSpacing: 0.2,
   },
   primaryText: {
     color: colors.white,
