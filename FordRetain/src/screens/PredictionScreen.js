@@ -1,69 +1,69 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import colors from '../styles/colors';
+import { predictClientProfile } from '../services/api';
 
-function predictProfile(form) {
-  const meses = Number(form.tempoUltimaRevisaoMeses || 0);
-  const distancia = Number(form.distanciaKm || 0);
-  const gasto = Number(form.valorGasto || 0);
-  const visitas = Number(form.frequenciaVisitasAno || 0);
-
-  let score = 0;
-  score += meses >= 12 ? 40 : meses >= 8 ? 28 : meses >= 4 ? 14 : 6;
-  score += form.garantiaStatus.toLowerCase().includes('venc') ? 20 : 8;
-  score += distancia > 25 ? 18 : distancia > 15 ? 10 : 4;
-  score += visitas <= 1 ? 12 : visitas <= 2 ? 6 : 2;
-  score += gasto < 900 ? 10 : gasto < 1700 ? 5 : 2;
-
-  const probabilidade = Math.max(10, Math.min(95, score));
-  const risco = probabilidade >= 75 ? 'Alto' : probabilidade >= 50 ? 'Médio' : 'Baixo';
-  const perfil = probabilidade >= 75 ? 'Cliente em Risco' : probabilidade >= 50 ? 'Cliente Econômico' : 'Cliente Fiel';
-  const acaoRecomendada =
-    risco === 'Alto' ? 'Contato preventivo imediato + pacote de manutenção' : risco === 'Médio' ? 'Cupom de revisão + lembrete automático' : 'Programa de fidelidade e prioridade no atendimento';
-
-  return {
-    perfil,
-    probabilidade,
-    risco,
-    acaoRecomendada,
-    explicacao:
-      'Simulação acadêmica baseada em atraso de revisão, garantia, distância, frequência e gasto em serviços.',
-  };
-}
+const initialForm = {
+  idade: '',
+  regiao: 'Sudeste',
+  modelo: 'Ford Ranger',
+  formaPagamento: 'Financiamento',
+  canalCompra: 'Concessionária',
+  historicoMarca: 'Primeiro Ford',
+};
 
 export default function PredictionScreen({ navigation }) {
-  const [form, setForm] = useState({
-    tempoUltimaRevisaoMeses: '',
-    garantiaStatus: 'Vencida',
-    distanciaKm: '',
-    frequenciaVisitasAno: '',
-    valorGasto: '',
-  });
+  const [form, setForm] = useState(initialForm);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
+  async function handlePredict() {
+    setLoading(true);
+    try {
+      const prediction = await predictClientProfile(form);
+      setResult(prediction);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Classificação de Risco</Text>
-      <Text style={styles.subtitle}>Preencha os dados e simule o perfil de risco de evasão (uso acadêmico).</Text>
+      <Text style={styles.title}>Classificação Preditiva</Text>
+      <Text style={styles.subtitle}>Simulação do endpoint POST /predict usando somente dados disponíveis no momento da compra.</Text>
 
-      <TextInput style={styles.input} placeholder="Meses desde a última revisão" value={form.tempoUltimaRevisaoMeses} onChangeText={(v) => update('tempoUltimaRevisaoMeses', v)} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Status da garantia (Ativa/Vencida)" value={form.garantiaStatus} onChangeText={(v) => update('garantiaStatus', v)} />
-      <TextInput style={styles.input} placeholder="Distância da concessionária (km)" value={form.distanciaKm} onChangeText={(v) => update('distanciaKm', v)} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Frequência de visitas ao ano" value={form.frequenciaVisitasAno} onChangeText={(v) => update('frequenciaVisitasAno', v)} keyboardType="numeric" />
-      <TextInput style={styles.input} placeholder="Valor gasto em serviços (R$)" value={form.valorGasto} onChangeText={(v) => update('valorGasto', v)} keyboardType="numeric" />
+      <View style={styles.warningBox}>
+        <Text style={styles.warningTitle}>Regra anti data leakage</Text>
+        <Text style={styles.warningText}>Esta tela não usa revisões feitas, gastos, garantia vencida, última revisão ou frequência de visitas. A previsão considera apenas dados conhecidos na venda.</Text>
+      </View>
 
-      <PrimaryButton title="Prever Perfil" onPress={() => setResult(predictProfile(form))} />
+      <TextInput style={styles.input} placeholder="Idade do cliente" value={form.idade} onChangeText={(v) => update('idade', v)} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Região" value={form.regiao} onChangeText={(v) => update('regiao', v)} />
+      <TextInput style={styles.input} placeholder="Modelo do veículo" value={form.modelo} onChangeText={(v) => update('modelo', v)} />
+      <TextInput style={styles.input} placeholder="Forma de pagamento" value={form.formaPagamento} onChangeText={(v) => update('formaPagamento', v)} />
+      <TextInput style={styles.input} placeholder="Canal de compra" value={form.canalCompra} onChangeText={(v) => update('canalCompra', v)} />
+      <TextInput style={styles.input} placeholder="Histórico com a marca" value={form.historicoMarca} onChangeText={(v) => update('historicoMarca', v)} />
+
+      {loading ? (
+        <View style={styles.loadingBox}>
+          <ActivityIndicator color={colors.fordBlue} />
+          <Text style={styles.loadingText}>Enviando dados para a API simulada...</Text>
+        </View>
+      ) : (
+        <PrimaryButton title="Prever Perfil" onPress={handlePredict} />
+      )}
 
       {result && (
         <View style={styles.resultCard}>
-          <Text style={styles.resultTitle}>Resultado da simulação</Text>
+          <Text style={styles.resultTitle}>Resultado da classificação</Text>
           <Text style={styles.row}><Text style={styles.label}>Perfil previsto:</Text> {result.perfil}</Text>
           <Text style={styles.row}><Text style={styles.label}>Probabilidade:</Text> {result.probabilidade}%</Text>
           <Text style={styles.row}><Text style={styles.label}>Nível de risco:</Text> {result.risco}</Text>
           <Text style={styles.row}><Text style={styles.label}>Ação recomendada:</Text> {result.acaoRecomendada}</Text>
+          <Text style={styles.row}><Text style={styles.label}>Variáveis usadas:</Text> {result.variaveisUtilizadas.join(', ')}</Text>
           <Text style={styles.row}><Text style={styles.label}>Explicação:</Text> {result.explicacao}</Text>
         </View>
       )}
@@ -77,7 +77,12 @@ const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: colors.background, flexGrow: 1, gap: 10 },
   title: { fontSize: 24, fontWeight: '800', color: colors.navy },
   subtitle: { color: colors.textGray },
+  warningBox: { backgroundColor: '#FFFBEB', borderColor: '#FCD34D', borderWidth: 1, borderRadius: 12, padding: 12 },
+  warningTitle: { color: colors.navy, fontWeight: '800', marginBottom: 4 },
+  warningText: { color: '#334155', lineHeight: 20 },
   input: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, color: colors.navy },
+  loadingBox: { backgroundColor: colors.white, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 14, alignItems: 'center' },
+  loadingText: { color: colors.textGray, marginTop: 8, fontWeight: '600' },
   resultCard: { backgroundColor: colors.white, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: 14, gap: 6 },
   resultTitle: { fontWeight: '800', color: colors.fordBlue },
   row: { color: '#1E293B', lineHeight: 20 },
