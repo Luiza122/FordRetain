@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import colors from '../styles/colors';
 import PrimaryButton from '../components/PrimaryButton';
+import AuthGuard from '../components/AuthGuard';
 import FeedbackModal from '../components/FeedbackModal';
 
 const campaigns = [
@@ -15,7 +16,8 @@ export default function RecommendationsScreen({ navigation }) {
   const [executedCampaign, setExecutedCampaign] = useState(null);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <AuthGuard navigation={navigation}>
+      <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Recomendações de Retenção</Text>
       <Text style={styles.subtitle}>Campanhas orientadas por risco, perfis de cluster e oportunidade de recuperação comercial.</Text>
 
@@ -53,7 +55,8 @@ export default function RecommendationsScreen({ navigation }) {
           navigation.navigate('Dashboard');
         }}
       />
-    </ScrollView>
+      </ScrollView>
+    </AuthGuard>
   );
 }
 

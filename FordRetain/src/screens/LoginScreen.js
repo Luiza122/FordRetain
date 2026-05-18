@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
-import { getMockCredentials } from '../data/mockAuth';
+import { authenticateMockUser } from '../data/mockAuth';
 import colors from '../styles/colors';
 import FeedbackModal from '../components/FeedbackModal';
 
@@ -19,13 +19,9 @@ export default function LoginScreen({ navigation, route }) {
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return showError('Digite um e-mail válido para continuar.');
 
-    const credentials = getMockCredentials();
-    if (!credentials) {
-      return showError('Nenhuma conta cadastrada. Crie uma conta para acessar o FordRetain.');
-    }
-
-    if (normalizedEmail !== credentials.email || password !== credentials.password) {
-      return showError('Verifique o e-mail e a senha informados.');
+    const user = authenticateMockUser(normalizedEmail, password);
+    if (!user) {
+      return showError('Verifique o e-mail, a senha e o perfil cadastrado.');
     }
 
     navigation.replace('Home');
@@ -43,6 +39,12 @@ export default function LoginScreen({ navigation, route }) {
         <PrimaryButton title="Entrar" onPress={handleLogin} />
         <Text style={styles.registerPrompt}>Ainda não tem conta?</Text>
         <PrimaryButton title="Criar conta" variant="secondary" onPress={() => navigation.navigate('Cadastro')} />
+
+        <View style={styles.demoBox}>
+          <Text style={styles.demoTitle}>Login de teste</Text>
+          <Text style={styles.demoText}>E-mail: gerente@fordretain.com</Text>
+          <Text style={styles.demoText}>Senha: 123456</Text>
+        </View>
       </View>
 
       <FeedbackModal
@@ -64,4 +66,7 @@ const styles = StyleSheet.create({
   subtitle: { color: colors.textGray, marginBottom: 16 },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, marginBottom: 10, color: colors.navy },
   registerPrompt: { color: colors.textGray, marginTop: 6, marginBottom: 2, textAlign: 'center', fontWeight: '600' },
+  demoBox: { backgroundColor: colors.lightBlue, borderRadius: 12, borderWidth: 1, borderColor: '#BFDBFE', padding: 12, marginTop: 10 },
+  demoTitle: { color: colors.navy, fontWeight: '800', marginBottom: 4 },
+  demoText: { color: '#334155', fontWeight: '600' },
 });

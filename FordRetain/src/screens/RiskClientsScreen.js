@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
+import AuthGuard from '../components/AuthGuard';
 import ClientCard from '../components/ClientCard';
 import colors from '../styles/colors';
 import { getLeads } from '../services/api';
@@ -32,15 +33,18 @@ export default function RiskClientsScreen({ navigation }) {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.fordBlue} />
-        <Text style={styles.loadingText}>Buscando leads priorizados na API...</Text>
-      </View>
+      <AuthGuard navigation={navigation}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.fordBlue} />
+          <Text style={styles.loadingText}>Buscando leads priorizados na API...</Text>
+        </View>
+      </AuthGuard>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <AuthGuard navigation={navigation}>
+      <View style={styles.container}>
       <Text style={styles.title}>Clientes Priorizados por Risco</Text>
       <Text style={styles.subtitle}>Dados carregados de forma assíncrona pelo endpoint simulado GET /leads.</Text>
 
@@ -67,7 +71,8 @@ export default function RiskClientsScreen({ navigation }) {
       />
 
       <PrimaryButton title="Voltar ao dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
-    </View>
+      </View>
+    </AuthGuard>
   );
 }
 

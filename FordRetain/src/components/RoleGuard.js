@@ -1,13 +1,32 @@
 import { View, Text, StyleSheet } from 'react-native';
 import PrimaryButton from './PrimaryButton';
 import colors from '../styles/colors';
-import { getMockCredentials } from '../data/mockAuth';
+import { getMockCredentials, logoutMockUser } from '../data/mockAuth';
 
 export default function RoleGuard({ allowedProfiles, navigation, children, message }) {
   const user = getMockCredentials();
   const hasAccess = user && allowedProfiles.includes(user.profile);
 
+  function goToLogin() {
+    logoutMockUser();
+    navigation.replace('Login');
+  }
+
   if (hasAccess) return children;
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.title}>Sessão expirada</Text>
+          <Text style={styles.message}>
+            Não encontramos um usuário logado. Faça login novamente para recuperar o perfil correto.
+          </Text>
+          <PrimaryButton title="Voltar ao Login" onPress={goToLogin} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -16,9 +35,10 @@ export default function RoleGuard({ allowedProfiles, navigation, children, messa
         <Text style={styles.message}>
           {message || 'Esta tela está disponível apenas para perfis autorizados.'}
         </Text>
-        <Text style={styles.profile}>Perfil atual: {user?.profile || 'não identificado'}</Text>
+        <Text style={styles.profile}>Perfil atual: {user.profile}</Text>
         <PrimaryButton title="Ir para clientes" onPress={() => navigation.navigate('Clients')} />
         <PrimaryButton title="Voltar para Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
+        <PrimaryButton title="Sair e voltar ao Login" variant="secondary" onPress={goToLogin} />
       </View>
     </View>
   );

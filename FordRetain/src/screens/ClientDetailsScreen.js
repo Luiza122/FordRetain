@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
+import AuthGuard from '../components/AuthGuard';
 import ProfileBadge from '../components/ProfileBadge';
 import colors from '../styles/colors';
 import FeedbackModal from '../components/FeedbackModal';
@@ -14,16 +15,19 @@ export default function ClientDetailsScreen({ route, navigation }) {
 
   if (!client) {
     return (
-      <View style={styles.container}>
+      <AuthGuard navigation={navigation}>
+        <View style={styles.container}>
         <Text style={styles.title}>Cliente não encontrado</Text>
         <Text style={styles.subtitle}>Não recebemos um cliente válido. Retorne para a lista de clientes.</Text>
         <PrimaryButton title="Voltar" onPress={() => navigation.navigate('Clients')} />
-      </View>
+        </View>
+      </AuthGuard>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <AuthGuard navigation={navigation}>
+      <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{client.nome}</Text>
       <Text style={styles.subtitle}>{client.veiculo} • {client.ano} • {client.regiao}</Text>
 
@@ -68,7 +72,8 @@ export default function ClientDetailsScreen({ route, navigation }) {
       <PrimaryButton title="Voltar para clientes" variant="secondary" onPress={() => navigation.navigate('Clients')} />
 
       <FeedbackModal visible={feedback.visible} type="sucesso" title={feedback.title} message={feedback.message} buttonText="Continuar" onButtonPress={() => setFeedback((prev) => ({ ...prev, visible: false }))} />
-    </ScrollView>
+      </ScrollView>
+    </AuthGuard>
   );
 }
 
