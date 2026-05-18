@@ -28,16 +28,25 @@ Na tela de classificação são usados somente dados conhecidos no momento da co
 ## Tecnologias utilizadas
 - React Native
 - Expo
-- React Navigation
+- Expo Router
 - JavaScript
+- Hooks: `useState`, `useEffect` e `useMemo`
 - API simulada local com Promises e carregamento assíncrono
 
 ## Estrutura de pastas
 ```text
 FordRetain/
-├── App.js
+├── app/
+│   ├── _layout.js
+│   ├── index.js
+│   ├── home.js
+│   ├── dashboard.js
+│   ├── clients.js
+│   ├── client-details.js
+│   ├── prediction.js
+│   ├── profiles.js
+│   └── recommendations.js
 ├── app.json
-├── index.js
 ├── package.json
 ├── src/
 │   ├── components/
@@ -46,13 +55,13 @@ FordRetain/
 │   ├── screens/
 │   ├── services/
 │   │   └── api.js
-│   ├── styles/
-│   └── utils/
+│   └── styles/
 └── assets/
 ```
 
 ## Funcionalidades
 - Login mockado e cadastro funcional.
+- Navegação com Expo Router.
 - Home explicativa do problema e valor de negócio.
 - Dashboard com indicadores, resumo executivo e gráficos visuais simples.
 - Consumo assíncrono de dados por API simulada.
@@ -96,6 +105,19 @@ npx expo start -c
 - Recomendações
 - Classificação Preditiva
 - Clustering de Perfis
+
+## Checklist de aderência à Sprint
+- [x] Aplicativo mobile em React Native com Expo.
+- [x] Navegação intuitiva com Expo Router.
+- [x] Interface clara e visual para apresentação.
+- [x] Gerenciamento de estado com hooks.
+- [x] Consumo assíncrono de dados por API simulada.
+- [x] Dashboard com métricas de VIN Share e risco.
+- [x] Lista de clientes priorizados.
+- [x] Tela de detalhes com recomendação personalizada.
+- [x] Classificação preditiva sem data leakage.
+- [x] Clustering com quatro perfis esperados.
+- [x] README com instalação, execução, login e escopo.
 
 ## Como apresentar
 O FordRetain é um app mobile de retenção preditiva para concessionárias Ford. Ele apoia o gerente na identificação de clientes com risco de evasão após a compra, mostra dashboards de VIN Share e recomenda ações personalizadas para aumentar a retenção. A classificação evita data leakage porque utiliza apenas informações disponíveis no momento da compra.
