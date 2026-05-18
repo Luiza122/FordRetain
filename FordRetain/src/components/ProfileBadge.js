@@ -4,6 +4,7 @@ const PROFILE_COLORS = {
   'Cliente Fiel': '#16A34A',
   'Cliente Econômico': '#F59E0B',
   'Cliente Esquecido': '#1E5AA8',
+  'Cliente de Abandono': '#DC2626',
   'Cliente em Risco': '#DC2626',
 };
 
