@@ -1,15 +1,16 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import colors from '../styles/colors';
+import { getMockCredentials } from '../data/mockAuth';
 
 const STEPS = [
   {
     title: '1) Clustering de perfis',
-    text: 'Segmenta a base em Cliente Fiel, Econômico, Esquecido e em Risco para comunicação personalizada.',
+    text: 'Segmenta a base em Cliente Fiel, Econômico, Esquecido e Cliente de Abandono para comunicação personalizada.',
   },
   {
     title: '2) Classificação de risco',
-    text: 'Estima probabilidade de evasão usando variáveis de manutenção, garantia, frequência e comportamento.',
+    text: 'Estima o perfil do cliente usando apenas dados disponíveis no momento da compra, evitando data leakage.',
   },
   {
     title: '3) Recomendações de retenção',
@@ -18,11 +19,25 @@ const STEPS = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const user = getMockCredentials();
+  const isManager = user?.profile === 'Gerente';
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
         <Text style={styles.title}>FordRetain</Text>
         <Text style={styles.subtitle}>Plataforma preditiva para retenção no pós-venda Ford.</Text>
+      </View>
+
+      <View style={styles.profileCard}>
+        <Text style={styles.profileTitle}>Usuário logado</Text>
+        <Text style={styles.text}>Nome: {user?.name || 'Usuário cadastrado'}</Text>
+        <Text style={styles.text}>Perfil: {user?.profile || 'Não identificado'}</Text>
+        <Text style={styles.profileDescription}>
+          {isManager
+            ? 'Acesso de gerente: dashboard executivo, classificação, clustering, recomendações e clientes.'
+            : 'Acesso de atendente: foco operacional em clientes, detalhes, contato e recomendações.'}
+        </Text>
       </View>
 
       <View style={styles.card}>
@@ -52,10 +67,10 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.actions}>
-        <PrimaryButton title="Dashboard" onPress={() => navigation.navigate('Dashboard')} />
+        {isManager ? <PrimaryButton title="Dashboard Executivo" onPress={() => navigation.navigate('Dashboard')} /> : null}
         <PrimaryButton title="Clientes" onPress={() => navigation.navigate('Clients')} />
-        <PrimaryButton title="Classificação" onPress={() => navigation.navigate('Prediction')} />
-        <PrimaryButton title="Clustering" onPress={() => navigation.navigate('Profiles')} />
+        {isManager ? <PrimaryButton title="Classificação" onPress={() => navigation.navigate('Prediction')} /> : null}
+        {isManager ? <PrimaryButton title="Clustering" onPress={() => navigation.navigate('Profiles')} /> : null}
         <PrimaryButton title="Recomendações" onPress={() => navigation.navigate('Recommendations')} />
       </View>
     </ScrollView>
@@ -68,6 +83,9 @@ const styles = StyleSheet.create({
   title: { fontSize: 30, fontWeight: '800', color: colors.white },
   subtitle: { color: '#DBEAFE', marginTop: 4 },
   card: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 14, gap: 8 },
+  profileCard: { backgroundColor: colors.lightBlue, borderWidth: 1, borderColor: '#BFDBFE', borderRadius: 14, padding: 14, gap: 5 },
+  profileTitle: { fontWeight: '800', color: colors.navy, fontSize: 16 },
+  profileDescription: { color: colors.fordBlue, fontWeight: '700', lineHeight: 20 },
   cardTitle: { fontWeight: '800', color: colors.fordBlue, fontSize: 16 },
   stepItem: { marginTop: 2 },
   stepTitle: { color: colors.navy, fontWeight: '700' },
