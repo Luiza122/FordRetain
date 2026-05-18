@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import RoleGuard from '../components/RoleGuard';
+import AppLogo from '../components/AppLogo';
 import colors from '../styles/colors';
 import { getDashboard, getApiHealth } from '../services/api';
 import { logoutMockUser } from '../data/mockAuth';
@@ -89,8 +90,11 @@ export default function DashboardScreen({ navigation }) {
       ) : (
         <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
           <View style={styles.hero}>
+            <View style={styles.logoWrapper}>
+              <AppLogo small />
+            </View>
             <View style={styles.heroTop}>
-              <View>
+              <View style={styles.heroTextBlock}>
                 <Text style={styles.eyebrow}>Painel executivo</Text>
                 <Text style={styles.title}>FordRetain</Text>
                 <Text style={styles.subtitle}>Retenção preditiva e inteligência de VIN Share.</Text>
@@ -165,8 +169,10 @@ const styles = StyleSheet.create({
   container: { padding: 16, backgroundColor: colors.background, flexGrow: 1, paddingBottom: 28 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background, padding: 18 },
   loadingText: { marginTop: 10, color: colors.textGray, fontWeight: '700', textAlign: 'center' },
-  hero: { backgroundColor: colors.navy, borderRadius: 28, padding: 20, marginBottom: 14, ...cardShadow },
+  hero: { backgroundColor: colors.navy, borderRadius: 30, padding: 20, marginBottom: 14, ...cardShadow },
+  logoWrapper: { marginBottom: 14, alignItems: 'center' },
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
+  heroTextBlock: { flex: 1 },
   eyebrow: { color: '#9CC5FF', fontWeight: '800', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.2 },
   title: { fontSize: 34, fontWeight: '900', color: colors.white, marginTop: 4 },
   subtitle: { color: '#DCEBFF', marginTop: 4, lineHeight: 20 },
