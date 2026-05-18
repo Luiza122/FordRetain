@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation, route }) {
 
     const user = authenticateMockUser(normalizedEmail, password);
     if (!user) {
-      return showError('Verifique o e-mail, a senha e o perfil cadastrado.');
+      return showError('Verifique o e-mail e a senha cadastrados.');
     }
 
     navigation.replace('Home');
@@ -39,12 +39,6 @@ export default function LoginScreen({ navigation, route }) {
         <PrimaryButton title="Entrar" onPress={handleLogin} />
         <Text style={styles.registerPrompt}>Ainda não tem conta?</Text>
         <PrimaryButton title="Criar conta" variant="secondary" onPress={() => navigation.navigate('Cadastro')} />
-
-        <View style={styles.demoBox}>
-          <Text style={styles.demoTitle}>Login de teste</Text>
-          <Text style={styles.demoText}>E-mail: gerente@fordretain.com</Text>
-          <Text style={styles.demoText}>Senha: 123456</Text>
-        </View>
       </View>
 
       <FeedbackModal
@@ -61,12 +55,9 @@ export default function LoginScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.navy, justifyContent: 'center', padding: 16 },
-  card: { backgroundColor: colors.white, borderRadius: 14, padding: 18, borderWidth: 1, borderColor: colors.border },
-  title: { fontSize: 30, fontWeight: '700', color: colors.navy, marginBottom: 6 },
-  subtitle: { color: colors.textGray, marginBottom: 16 },
-  input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, padding: 12, marginBottom: 10, color: colors.navy },
-  registerPrompt: { color: colors.textGray, marginTop: 6, marginBottom: 2, textAlign: 'center', fontWeight: '600' },
-  demoBox: { backgroundColor: colors.lightBlue, borderRadius: 12, borderWidth: 1, borderColor: '#BFDBFE', padding: 12, marginTop: 10 },
-  demoTitle: { color: colors.navy, fontWeight: '800', marginBottom: 4 },
-  demoText: { color: '#334155', fontWeight: '600' },
+  card: { backgroundColor: colors.white, borderRadius: 20, padding: 20, borderWidth: 1, borderColor: colors.border },
+  title: { fontSize: 32, fontWeight: '800', color: colors.navy, marginBottom: 6 },
+  subtitle: { color: colors.textGray, marginBottom: 16, lineHeight: 20 },
+  input: { borderWidth: 1, borderColor: colors.border, borderRadius: 14, padding: 13, marginBottom: 10, color: colors.navy, backgroundColor: colors.surfaceSoft },
+  registerPrompt: { color: colors.textGray, marginTop: 8, marginBottom: 2, textAlign: 'center', fontWeight: '700' },
 });
