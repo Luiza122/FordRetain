@@ -4,6 +4,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import RoleGuard from '../components/RoleGuard';
 import colors from '../styles/colors';
 import { getDashboard, getApiHealth } from '../services/api';
+import { logoutMockUser } from '../data/mockAuth';
 
 function MetricCard({ title, value, description, tone = 'blue' }) {
   const toneStyle = styles[`metric_${tone}`] || styles.metric_blue;
@@ -73,6 +74,11 @@ export default function DashboardScreen({ navigation }) {
     loadDashboard();
   }, []);
 
+  function handleLogout() {
+    logoutMockUser();
+    navigation.replace('Login');
+  }
+
   return (
     <RoleGuard navigation={navigation} allowedProfiles={['Gerente']} message="O dashboard executivo é exclusivo para o perfil Gerente.">
       {loading ? (
@@ -139,6 +145,7 @@ export default function DashboardScreen({ navigation }) {
             <PrimaryButton title="Simular classificação" onPress={() => navigation.navigate('Prediction')} />
             <PrimaryButton title="Ver perfis de clustering" onPress={() => navigation.navigate('Profiles')} />
             <PrimaryButton title="Voltar para Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
+            <PrimaryButton title="Sair e voltar ao Login" variant="secondary" onPress={handleLogout} />
           </View>
         </ScrollView>
       )}

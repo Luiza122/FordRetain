@@ -1,7 +1,8 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import colors from '../styles/colors';
-import { getMockCredentials } from '../data/mockAuth';
+import AuthGuard from '../components/AuthGuard';
+import { getMockCredentials, logoutMockUser } from '../data/mockAuth';
 
 const STEPS = [
   {
@@ -22,8 +23,14 @@ export default function HomeScreen({ navigation }) {
   const user = getMockCredentials();
   const isManager = user?.profile === 'Gerente';
 
+  function handleLogout() {
+    logoutMockUser();
+    navigation.replace('Login');
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <AuthGuard navigation={navigation}>
+      <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
         <Text style={styles.title}>FordRetain</Text>
         <Text style={styles.subtitle}>Plataforma preditiva para retenção no pós-venda Ford.</Text>
@@ -38,6 +45,7 @@ export default function HomeScreen({ navigation }) {
             ? 'Acesso de gerente: dashboard executivo, classificação, clustering, recomendações e clientes.'
             : 'Acesso de atendente: foco operacional em clientes, detalhes, contato e recomendações.'}
         </Text>
+        <PrimaryButton title="Sair e voltar ao Login" variant="secondary" onPress={handleLogout} />
       </View>
 
       <View style={styles.card}>
@@ -73,7 +81,8 @@ export default function HomeScreen({ navigation }) {
         {isManager ? <PrimaryButton title="Clustering" onPress={() => navigation.navigate('Profiles')} /> : null}
         <PrimaryButton title="Recomendações" onPress={() => navigation.navigate('Recommendations')} />
       </View>
-    </ScrollView>
+      </ScrollView>
+    </AuthGuard>
   );
 }
 
