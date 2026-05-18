@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
+import RoleGuard from '../components/RoleGuard';
 import colors from '../styles/colors';
 import { getDashboard, getApiHealth } from '../services/api';
 
@@ -17,16 +18,13 @@ function IndicatorCard({ title, value, description, tone = 'neutral' }) {
 
 function SimpleBarChart({ title, data, suffix = '' }) {
   const maxValue = Math.max(...data.map((item) => item.value), 1);
-
   return (
     <View style={styles.sectionCard}>
       <Text style={styles.sectionTitle}>{title}</Text>
       {data.map((item) => (
         <View key={item.label} style={styles.chartRow}>
           <Text style={styles.chartLabel}>{item.label}</Text>
-          <View style={styles.chartTrack}>
-            <View style={[styles.chartFill, { width: `${Math.max(8, (item.value / maxValue) * 100)}%` }]} />
-          </View>
+          <View style={styles.chartTrack}><View style={[styles.chartFill, { width: `${Math.max(8, (item.value / maxValue) * 100)}%` }]} /></View>
           <Text style={styles.chartValue}>{item.value}{suffix}</Text>
         </View>
       ))}
@@ -49,64 +47,50 @@ export default function DashboardScreen({ navigation }) {
         setLoading(false);
       }
     }
-
     loadDashboard();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.fordBlue} />
-        <Text style={styles.loadingText}>Carregando dados da API FordRetain...</Text>
-      </View>
-    );
-  }
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Dashboard Executivo FordRetain</Text>
-      <Text style={styles.subtitle}>Monitoramento analítico da retenção preditiva, risco de evasão e potencial de recuperação.</Text>
-
-      <View style={styles.apiBox}>
-        <Text style={styles.apiTitle}>Integração assíncrona</Text>
-        <Text style={styles.apiText}>{apiInfo.message}</Text>
-        <Text style={styles.apiText}>Endpoints simulados: {apiInfo.endpoints.join(' • ')}</Text>
-      </View>
-
-      <View style={styles.grid}>
-        <IndicatorCard title="Total de clientes analisados" value={String(dashboard.total)} description="Base consolidada para inteligência comercial." />
-        <IndicatorCard title="Clientes em alto risco" value={String(dashboard.highRisk)} description="Probabilidade de evasão acima de 75%." tone="danger" />
-        <IndicatorCard title="Clientes em risco médio" value={String(dashboard.mediumRisk)} description="Necessitam estímulos de retenção no curto prazo." tone="warning" />
-        <IndicatorCard title="Clientes em baixo risco" value={String(dashboard.lowRisk)} description="Relacionamento saudável e recorrente." tone="success" />
-        <IndicatorCard title="VIN Share estimado" value={`${dashboard.vinShareEstimado}%`} description="Estimativa acadêmica com base no risco agregado." />
-        <IndicatorCard title="Risco médio de evasão" value={`${dashboard.riscoMedio}%`} description="Indicador macro de saúde da carteira." tone="warning" />
-        <IndicatorCard title="Clientes com garantia vencida" value={String(dashboard.garantiaVencida)} description="Segmento sensível à perda de vínculo." tone="danger" />
-        <IndicatorCard title="Campanhas recomendadas" value={String(dashboard.campanhasRecomendadas)} description="Ações ativas no módulo de recomendações." />
-      </View>
-
-      <SimpleBarChart title="VIN Share estimado por região" data={dashboard.vinSharePorRegiao} suffix="%" />
-      <SimpleBarChart title="Clientes por nível de risco" data={dashboard.riscoPorNivel} />
-      <SimpleBarChart title="Distribuição por perfil de clustering" data={dashboard.clientesPorPerfil} />
-
-      <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>Resumo executivo</Text>
-        <Text style={styles.text}>A base analisada indica concentração de clientes com garantia vencida e risco elevado de evasão. A prioridade comercial deve ser o contato preventivo e campanhas de revisão para preservar recorrência de serviços e ampliar o VIN Share projetado.</Text>
-      </View>
-
-      <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>Próximas ações</Text>
-        <Text style={styles.text}>• Priorizar clientes com risco acima de 75% em até 24 horas.</Text>
-        <Text style={styles.text}>• Executar campanha de contato preventivo por telefone e CRM.</Text>
-        <Text style={styles.text}>• Acompanhar clientes com garantia vencida com oferta segmentada.</Text>
-        <Text style={styles.text}>• Revisar semanalmente a evolução do VIN Share e taxa de retorno.</Text>
-      </View>
-
-      <PrimaryButton title="Ver clientes em risco" onPress={() => navigation.navigate('Clients')} />
-      <PrimaryButton title="Ver recomendações" onPress={() => navigation.navigate('Recommendations')} />
-      <PrimaryButton title="Simular classificação" onPress={() => navigation.navigate('Prediction')} />
-      <PrimaryButton title="Ver perfis de clustering" onPress={() => navigation.navigate('Profiles')} />
-      <PrimaryButton title="Voltar para Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
-    </ScrollView>
+    <RoleGuard navigation={navigation} allowedProfiles={['Gerente']} message="O dashboard executivo é exclusivo para o perfil Gerente.">
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.fordBlue} />
+          <Text style={styles.loadingText}>Carregando dados da API FordRetain...</Text>
+        </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text style={styles.title}>Dashboard Executivo FordRetain</Text>
+          <Text style={styles.subtitle}>Monitoramento da retenção preditiva, risco de evasão e VIN Share.</Text>
+          <View style={styles.apiBox}>
+            <Text style={styles.apiTitle}>Integração assíncrona</Text>
+            <Text style={styles.apiText}>{apiInfo.message}</Text>
+            <Text style={styles.apiText}>Endpoints simulados: {apiInfo.endpoints.join(' • ')}</Text>
+          </View>
+          <View style={styles.grid}>
+            <IndicatorCard title="Total de clientes" value={String(dashboard.total)} description="Base analisada." />
+            <IndicatorCard title="Alto risco" value={String(dashboard.highRisk)} description="Risco acima de 75%." tone="danger" />
+            <IndicatorCard title="Risco médio" value={String(dashboard.mediumRisk)} description="Exigem acompanhamento." tone="warning" />
+            <IndicatorCard title="Baixo risco" value={String(dashboard.lowRisk)} description="Relacionamento saudável." tone="success" />
+            <IndicatorCard title="VIN Share estimado" value={`${dashboard.vinShareEstimado}%`} description="Indicador executivo." />
+            <IndicatorCard title="Risco médio" value={`${dashboard.riscoMedio}%`} description="Saúde da carteira." tone="warning" />
+            <IndicatorCard title="Garantia vencida" value={String(dashboard.garantiaVencida)} description="Segmento sensível." tone="danger" />
+            <IndicatorCard title="Campanhas" value={String(dashboard.campanhasRecomendadas)} description="Ações sugeridas." />
+          </View>
+          <SimpleBarChart title="VIN Share estimado por região" data={dashboard.vinSharePorRegiao} suffix="%" />
+          <SimpleBarChart title="Clientes por nível de risco" data={dashboard.riscoPorNivel} />
+          <SimpleBarChart title="Distribuição por perfil" data={dashboard.clientesPorPerfil} />
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>Resumo executivo</Text>
+            <Text style={styles.text}>A prioridade comercial deve ser o contato preventivo com clientes críticos para proteger o VIN Share.</Text>
+          </View>
+          <PrimaryButton title="Ver clientes em risco" onPress={() => navigation.navigate('Clients')} />
+          <PrimaryButton title="Ver recomendações" onPress={() => navigation.navigate('Recommendations')} />
+          <PrimaryButton title="Simular classificação" onPress={() => navigation.navigate('Prediction')} />
+          <PrimaryButton title="Ver perfis de clustering" onPress={() => navigation.navigate('Profiles')} />
+          <PrimaryButton title="Voltar para Home" variant="secondary" onPress={() => navigation.navigate('Home')} />
+        </ScrollView>
+      )}
+    </RoleGuard>
   );
 }
 
