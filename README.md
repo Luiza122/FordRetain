@@ -60,7 +60,8 @@ FordRetain/
 ```
 
 ## Funcionalidades
-- Login mockado e cadastro funcional.
+- Login por conta cadastrada no próprio app.
+- Cadastro funcional de usuário.
 - Navegação com Expo Router.
 - Home explicativa do problema e valor de negócio.
 - Dashboard com indicadores, resumo executivo e gráficos visuais simples.
@@ -80,9 +81,8 @@ A integração com API foi simulada em `src/services/api.js`, demonstrando carre
 - `GET /leads` — lista clientes em risco ordenados por prioridade.
 - `POST /predict` — recebe dados de compra e retorna perfil previsto, probabilidade, nível de risco e ação recomendada.
 
-## Login de teste
-- E-mail: `gerente@fordretain.com`
-- Senha: `123456`
+## Acesso ao aplicativo
+Não há login de teste fixo. Para acessar, crie uma conta na tela de cadastro e entre com o e-mail e senha cadastrados.
 
 ## Como instalar
 ```bash
@@ -117,7 +117,7 @@ npx expo start -c
 - [x] Tela de detalhes com recomendação personalizada.
 - [x] Classificação preditiva sem data leakage.
 - [x] Clustering com quatro perfis esperados.
-- [x] README com instalação, execução, login e escopo.
+- [x] README com instalação, execução, acesso e escopo.
 
 ## Como apresentar
 O FordRetain é um app mobile de retenção preditiva para concessionárias Ford. Ele apoia o gerente na identificação de clientes com risco de evasão após a compra, mostra dashboards de VIN Share e recomenda ações personalizadas para aumentar a retenção. A classificação evita data leakage porque utiliza apenas informações disponíveis no momento da compra.
