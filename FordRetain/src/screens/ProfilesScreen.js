@@ -10,31 +10,31 @@ const profiles = [
     comportamento: 'Agenda no prazo e valoriza experiência de atendimento.',
     risco: 'Baixo',
     estrategia: 'Fidelização premium com benefícios recorrentes.',
-    exemplo: 'Rafael: 3 visitas/ano e alto ticket de serviço.',
+    exemplo: 'Rafael: compra recorrente, preferência pela concessionária e baixa sensibilidade a preço.',
   },
   {
     nome: 'Cliente Econômico',
     descricao: 'Sensível a preço e custo-benefício.',
-    comportamento: 'Compara valores e adia decisões sem incentivo.',
+    comportamento: 'Compara valores e tende a responder melhor a campanhas promocionais.',
     risco: 'Médio',
-    estrategia: 'Combos promocionais e parcelamento de manutenção.',
-    exemplo: 'Mariana: manutenção irregular após garantia.',
+    estrategia: 'Combos promocionais, cupom de revisão e parcelamento de manutenção.',
+    exemplo: 'Mariana: perfil com maior chance de retornar quando recebe incentivo financeiro.',
   },
   {
     nome: 'Cliente Esquecido',
     descricao: 'Baixa disciplina no calendário de revisão.',
-    comportamento: 'Perde prazos por rotina corrida.',
+    comportamento: 'Perde prazos por rotina corrida e precisa de lembretes simples.',
     risco: 'Médio',
-    estrategia: 'Lembretes automáticos com agendamento rápido.',
-    exemplo: 'Patrícia: histórico bom, mas longos intervalos recentes.',
+    estrategia: 'Lembretes automáticos por WhatsApp, SMS e e-mail com agendamento rápido.',
+    exemplo: 'Patrícia: histórico positivo, mas precisa de contato preventivo para não perder o timing.',
   },
   {
-    nome: 'Cliente em Risco',
-    descricao: 'Sinais claros de evasão para oficinas independentes.',
-    comportamento: 'Longo tempo sem retorno e queda de gasto na rede oficial.',
+    nome: 'Cliente de Abandono',
+    descricao: 'Alta tendência de evasão para oficinas independentes após a compra ou garantia.',
+    comportamento: 'Baixo vínculo com a marca, maior sensibilidade a custo e menor recorrência esperada.',
     risco: 'Alto',
-    estrategia: 'Contato consultivo imediato com proposta de recuperação.',
-    exemplo: 'Ricardo: 14 meses sem revisão na concessionária.',
+    estrategia: 'Contato consultivo imediato, pacote de revisões e proposta de recuperação.',
+    exemplo: 'Ricardo: perfil crítico que exige ação rápida da concessionária.',
   },
 ];
 
@@ -42,7 +42,7 @@ export default function ProfilesScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Clustering de Perfis</Text>
-      <Text style={styles.subtitle}>Segmentação comportamental para aumentar retenção e eficiência comercial.</Text>
+      <Text style={styles.subtitle}>Segmentação comportamental obtida na Base 1 para orientar a classificação e as campanhas de retenção.</Text>
 
       {profiles.map((profile) => (
         <View key={profile.nome} style={styles.card}>
@@ -55,6 +55,11 @@ export default function ProfilesScreen({ navigation }) {
         </View>
       ))}
 
+      <View style={styles.explanationCard}>
+        <Text style={styles.sectionTitle}>Como isso entra no modelo</Text>
+        <Text style={styles.row}>Na etapa acadêmica, os perfis descobertos pelo clustering viram a variável-alvo da classificação. Depois, o app simula a previsão de novos clientes usando apenas dados da compra, sem usar dados pós-venda.</Text>
+      </View>
+
       <PrimaryButton title="Voltar ao Dashboard" variant="secondary" onPress={() => navigation.navigate('Dashboard')} />
     </ScrollView>
   );
@@ -65,6 +70,8 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '800', marginBottom: 2, color: colors.navy },
   subtitle: { color: colors.textGray, marginBottom: 10 },
   card: { backgroundColor: colors.white, borderRadius: 12, padding: 14, marginBottom: 12, borderWidth: 1, borderColor: colors.border, gap: 7 },
+  explanationCard: { backgroundColor: colors.lightBlue, borderRadius: 12, padding: 14, marginBottom: 12, borderWidth: 1, borderColor: '#BFDBFE', gap: 7 },
+  sectionTitle: { color: colors.navy, fontWeight: '800', marginBottom: 4 },
   row: { color: '#1E293B', lineHeight: 20 },
   label: { fontWeight: '800', color: colors.navy },
 });
